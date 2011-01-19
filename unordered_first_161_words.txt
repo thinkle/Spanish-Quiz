@@ -1,0 +1,161 @@
+abuelo:grandparent
+alto:tall
+alucinar:flip-out/be super into
+amar:love (a person)
+amigo:friend
+el apartamento:apartment
+el áribitro:umpire
+la armonía:harmony
+atleta:athlete
+atrapar:catch
+el azúcar:sugar
+el bajo:bass
+bajo:short
+barrer:slide
+el barrio:neighborhood
+batear:bat
+beisbolista:baseball player
+besar:kiss
+el beso:kiss
+la bola:ball
+el calor:the heat
+el campo:the country
+la canción:song
+cantar:sing
+el caribe:the caribbean
+la carrera:run
+la casa:house
+casado:married
+la cañaveral:sugar cane plantation
+chutar:bat¸ get a hit
+la ciudad:city
+la ciudad:city
+conocer*:be familiar with, meet, know
+contar (o->ue) :tell
+costar:cost
+creer:believe
+cruzar:cross
+cuento:story
+dar* (di/diste/dio...):give, hit
+decir* (dij-):say, tell
+defender (e->ie):field, defend
+dejar:leave,let,allow,stop
+deportista:sportsman
+el derecho:right (law)
+el desierto: desert
+el dinero:money
+doble:double
+echar de menos:miss
+el ejército:army
+encantar:enchant/love
+entrar:enter,go in
+esposo:spouse
+estar* (estuv-):be
+el este:East
+el estribillo: refrain, chorus (n)
+estudiante:student
+extrañar:miss
+faltar:be missing/lack
+la fama:fame, reputation
+fascinar:fascinate/love
+fuera:out
+el guante:glove
+la guerra:war
+gustar:please/like
+el género:genre, gender, style
+home (jon):home plate
+el imperio:empire
+el impuesto:tax
+interesar:interest/be interested in
+la isla:island
+jardinero:outfielder / gardener
+jonrón:home run
+jugador:player
+jugar (u->ue):play (a game)
+lanzar:throw
+las grandes ligas:the big leagues
+las mayores:the majors
+la letra:lyrics, words (n)
+llover:rain (v)
+lluvia:rain (n)
+los negocios:business
+luchar:fight, struggle
+madrastra:stepmother
+madre:mother
+madrina:godmother
+la manopla:glove
+el mar:sea
+marido:husband
+memorias:memory
+molar:be great/be into
+la montaña:mountain
+mujer:wife/woman
+el músico:musician
+nena:baby girl
+nieto/a:grandson/daughter
+norte:North
+oeste:West
+oler*:smell
+olvidar:forget
+oír*:hear
+padrastro:stepfather
+padre:father
+padrino:godfather
+parecer*:appear/think,seem
+parque:park
+el país:country (nation)
+pegar:hit, stick
+la pelota:ball
+pelotera:ballplayer
+pensar (e->ie):think
+la playa:beach
+la pobreza:poverty
+el poder: power
+poder* (o->ue) (pud-):be able to, can/could
+poner* (pus-):put
+el primer base:firstbaseman
+primo:cousin
+el pueblo:town
+quedar:remain/have left
+quemar:burn
+querer*(e->ie)(quis-):love, want
+el rapero:rapper
+recordar (o->ue):remember
+reunir:meet
+la riqueza:wealth
+el ritmo:rhythm
+el río:river
+saber a (sup-):taste
+saber* (sup-):know
+salir*:go out
+el salón de la fama:hall of fame
+la sangre:blood
+el segundo base:secondbaseman
+la selva:jungle
+sencillo:single (simple)
+sentir (e->ie):feel
+ser* (fui...):be
+sobrar:be extra/have extra
+sobrino/a:nephew/niece
+el sol:the sun (n)
+sonar (o->ue):sound
+strike (estraic):strike
+el sueldo:salary
+el sur:South
+tener ___ años:be ___ years old
+tener ganas de...:want to
+tener hambre:be hungry
+tener sed:be thirsty
+tener sueño:be sleepy
+tener* (tuv-):have
+el tercer base:thirdbaseman
+tocar:touch, play (an instrument)
+trabajar:work
+triple:triple
+el turno:inning
+tío/a:uncle/aunt
+venir* (vin-):come
+ver* (vi/viste/vio...):see
+viajar:travel
+la voz:voice
+la zona:area

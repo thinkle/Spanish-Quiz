@@ -1,0 +1,10 @@
+<html>
+  <body>
+    <b>Welcome to MR Hinkle's incredibly Low Tech Web Study App</b>
+    <ul>
+      {% for d in data %}
+      <li><a href="/mc/{{d.id}}/">QUIZ {{d.name}}</a></li>
+      {% endfor %}
+      </ul>
+  </body>
+</html>

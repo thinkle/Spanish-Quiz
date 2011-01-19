@@ -1,0 +1,37 @@
+<html>
+  <body>
+    <table style="margin: 3em">
+      <tr>
+	<td valign="top">
+
+	  <form action="/mc/answer/" method="post">
+	    <input type="hidden" name="data" value="{{data}}">
+	    <p><span style="font-size:3 em"><b>{{question}}</b></span> <input type="hidden" name="correct_answer" value="{{answer}}">
+	      <table>
+		{% for arow in answer_rows %}
+		<tr>
+		  {% for a in arow%}
+		  <td><input type="submit" name="answer" value="{{a}}">
+		    {% endfor %}
+		</tr>
+		{% endfor %}
+	      </table>
+	  </form>
+
+	</td>
+	<td>
+	  <a href="/quiz/">Choose another quiz</a>
+	  <p>Class Record is: {{record}}</p>
+	  {% if prev == 'right' %}
+	  <p>Correct!</p>
+	  <img src="http://rlv.zcache.com/dancing_penguins_card-p137325738401648753q0yk_400.jpg">
+	  {% endif %}
+	  {% if prev == 'wrong' %}
+	  <p>Sorry, you were wrong.</p>
+	  <img src="http://2.bp.blogspot.com/_91x7iXoXy_U/S9MmdgvyGSI/AAAAAAAAAkA/SH8EHgP9tWs/s1600/frown-front.jpg">
+	  {% endif %}
+	</td>
+      </tr>
+    </table>
+  </body>
+</html>

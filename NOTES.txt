@@ -1,0 +1,49 @@
+Structure
+---------
+Triplets:
+- English | Notes | Spanish
+- Picture | Notes | Spanish
+- Audio | Notes | Spanish
+- Video | Notes | Spanish
+
+Displays:
+- Flash cards
+- Quizzes (multiple choice, closed, teacher-graded)
+- One-at-a-time
+- Print a list
+- Print a quiz (multiple choice)
+
+Categories:
+Vocabulary, Theme, Grammar, etc (tags)
+
+Quizzing Data:
+- Practices (how many times they've seen each triplet, in which direction)
+- What they've gotten right
+
+Data Model:
+Triplet Table
+ID - unique #
+A - HTML (simple way to handle multimedia/etc)
+Notes - HTML
+B - HTML (simple way to handle multimedia/etc)
+
+Category Table
+Triplet_ID
+Category_ID
+
+Categories_Table
+Category_ID
+Category_Descriptor
+Category_Metadata ??? (type, etc)
+
+Students_Table
+Student_ID
+Google_ID
+Class
+
+Quiz_Data
+Student_ID
+Triplet_ID
+Correct - boolean
+Timestamp
+

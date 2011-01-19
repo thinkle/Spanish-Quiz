@@ -1,0 +1,63 @@
+<html>
+  <body>
+    <table style="margin: 3em">
+      <tr>
+	<td valign="top">
+
+	  <form action="/mc/answer/" method="post">
+	    <input type="hidden" name="category" value="{{category}}">
+	    <input type="hidden" name="target" value="{{target.id}}">
+	    <input type="hidden" name="reverse" value="{{reverse}}">	    
+	    <p><span style="font-size:3 em"><b>
+		  {% if reverse %}
+		  {{target.l2}}
+		  {% else %}
+		  {{target.l1}}
+		  {% endif %}
+	      </b></span> <input type="hidden" name="correct_answer"
+				 {% if reverse %}
+				 value="{{target.l1}}"
+				 {% else %}
+				 value="{{target.l2}}"
+				 {% endif %}
+				 >
+	      <table>
+		{% for arow in answer_rows %}
+		<tr>
+		  {% for a in arow%}
+		  <td><input type="submit" name="answer"
+			     {% if reverse %}
+			     value="{{a.l1}}"
+			     {% else %}
+			     value="{{a.l2}}"
+			     {% endif %}
+			     >
+		    {% endfor %}
+		</tr>
+		{% endfor %}
+	      </table>
+	  </form>
+
+	</td>
+	<td>
+	  {% if reverse %}
+	  <a href="/mc/{{category}}/">Reverse!</a>
+	  {% else %}
+	  <a href="/mc/{{category}}/r">Reverse!</a>
+	  {% endif %}
+	  <a href="/quiz/">Choose another quiz</a>
+	  <p>Class Record is: {{record}}</p>
+	  {% if prev == 'right' %}
+	  <p>Correct!</p>
+	  <img src="http://rlv.zcache.com/dancing_penguins_card-p137325738401648753q0yk_400.jpg">
+	  {% endif %}
+	  {% if prev == 'wrong' %}
+	  <p>Sorry, you were wrong.</p>
+	  <p>{{rightanswer.l1}}={{rightanswer.l2}}</p>
+	  <img src="http://2.bp.blogspot.com/_91x7iXoXy_U/S9MmdgvyGSI/AAAAAAAAAkA/SH8EHgP9tWs/s1600/frown-front.jpg">
+	  {% endif %}
+	</td>
+      </tr>
+    </table>
+  </body>
+</html>

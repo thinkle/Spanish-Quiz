@@ -1,0 +1,35 @@
+# -*- coding: utf-8
+FPS = 0 # First person singular
+SPS = 1
+TPS = 2
+FPP = 3
+SPP = 4
+TPP = 5
+
+def make_form_from_stem (infinitive, ending):
+    SOFT_VOWELS = 'éíei'
+    if infinitive.endswith('zar') and ending[0] in SOFT_VOWELS:
+        return infinitive[:3]+'c'+ending
+    elif infinitive endswith('car') and ending[0] in SOFT_VOWELS:
+        return infinitive[:3]+'qu'+ending
+    elif infinitive endswith('gar') and ending[0] in SOFT_VOWELS:
+        return infinitive[:3]+'gu'+ending
+    else:
+        return infinitive[:2]+ending
+
+def make_preterit (inf, person):
+    return make_verb(inf,person,
+                     ar_stems = {FPS:'é',SPS:'aste',TPS:'ó',
+                                 FPP:'amos',SPP:'asteis',TPP:'aron'}
+                     er_stems = {FPS:'í',SPS:'iste',TPS:'ió',
+                                 FPP:'imos',SPP:'isteis',TPP:'ieron'})
+              
+
+def make_verb (inf, person, ar_stems, er_stems, ir_stems=None):
+    if not ir_stems: ir_stems = er_stems
+    if inf.endswith('ar'):
+        return make_form_from_stem(inf,ar_stems[person])
+    elif inf.endswith('er'):
+        return make_form_from_stem(inf,er_stems[person])
+    else:
+        return make_form_from_stem(inf,ir_stems[person])

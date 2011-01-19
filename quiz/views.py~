@@ -1,0 +1,127 @@
+# -*- coding: utf-8
+from django.http import HttpResponse, HttpResponseRedirect
+from django import forms
+from django.shortcuts import render_to_response
+from django.template import Context, loader
+import sys
+import re, random
+from django.utils import simplejson
+
+# Data model
+present_data_set = [['hablo','I talk'],
+                    ['hablas','You talk'],
+                    ['habla','He talks'],
+                    ['hablamos','We talk'],
+                    ['hablan','They talk'],
+                    ['como','I eat'],
+                    ['come','He eats'],
+                    ['comes','You eat'],
+                    ['comen','They eat'],
+                    ['comemos','We eat'],                                      
+                    ]
+
+past_data_set = [['comí','I ate'],
+                 ['comiste','You ate'],
+                 ['hablé','I talked'],
+                 ['hablaste','You talked'],
+                 ['comieron','They ate'],
+                 ['comimos','We ate'],
+                 ['comió','He ate'],
+                 ['habló','She talked'],
+                 ['hablaron','They talked']]
+
+past_irregular_data_set = [
+    ['tuve','I had'],
+    ['puse','I put'],
+    ['supe','I knew'],
+    ['tuvo','He had'],
+    ['puso','He put'],
+    ['supo','He knew'],
+    ['pusimos','We put'],
+    ['supimos','We knew'],
+    ['tuvimos','We had'],
+    ['fui','I went'],
+    ['fuiste','You went'],
+    ['fue','He went'],
+    ['fueron','They went'],
+    ['pusieron','They put']
+    ]
+
+
+vocab_data_set = []
+ifi = file('unordered_first_161_words.txt','r')
+for l in ifi.readlines():
+    words = l.split(':')
+    words = [w.strip() for w in words]
+    vocab_data_set.append(words)
+
+CORRECT = 0
+TRIED = 0
+
+class o:
+    def __init__ (self, number, name):
+        self.number = number
+        self.name = name
+
+
+data_sets = [vocab_data_set, present_data_set, past_data_set,past_irregular_data_set]
+data_set_dic = {
+    0:'Vocabulary',
+    1:'Present Tense',
+    2:'Past Regular',
+    3:'Past Irregular',
+    }
+
+def index (request):
+    lst = []
+    
+    return render_to_response(
+        'index.html',
+        {'data':data_set_dic})
+
+def mc (request, data, prev=None, rightanswer=None):
+    data = int(data)
+    my_data = data_sets[data][:]
+    random.shuffle(my_data)
+    q_a = my_data.pop()
+    try:
+        answers = [q_a[1]] + [d[1] for d in  random.sample(my_data,3)]
+    except:
+        try:
+            answers = [q_a[1]] + [d[1] for d in  random.sample(my_data,3)]
+        except:
+            return mc(request,data,prev,rightanswer)
+    random.shuffle(answers)
+    answer_rows = [[answers[0],answers[1]],[answers[2],answers[3]]]
+    return render_to_response(
+        'simple_quiz.html',
+        {'record':(TRIED and '%s/%s'%(CORRECT,TRIED) or ''),
+         'data':data,
+         'question':q_a[0],
+         'answer':q_a[1],
+        'answer_rows':answer_rows,
+         'prev':prev,
+         })
+
+def mc_right (request,data):
+    return mc(request,data,prev='right')
+
+def mc_wrong (request,data):
+    return mc(request,data,prev='wrong')
+         
+def mc_answer (request):
+    global CORRECT,TRIED
+    if request.method == 'POST':
+        answer = request.POST['answer']
+        data = request.POST['data']
+        correct_answer = request.POST['correct_answer']
+        TRIED += 1
+        if answer==correct_answer:
+            CORRECT += 1
+            return HttpResponseRedirect('/mc/right/%s'%data)
+        else:
+            return HttpResponseRedirect('/mc/wrong/%s'%data)
+
+
+                
+
