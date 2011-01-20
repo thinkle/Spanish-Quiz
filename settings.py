@@ -1,7 +1,14 @@
 # Django settings for quizlet project.
+import socket
 
-DEBUG = True
-TEMPLATE_DEBUG = DEBUG
+if socket.gethostname() == 'pebble':
+    print 'My laptop'
+    DEBUG = True
+    TEMPLATE_DEBUG = DEBUG
+else:
+    print 'Not my laptop'
+    DEBUG = TEMPLATE_DEBUG =  False
+    
 
 ADMINS = (
     # ('Your Name', 'your_email@domain.com'),
