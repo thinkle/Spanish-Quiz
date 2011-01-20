@@ -8,6 +8,14 @@ from django.utils import simplejson
 import models
 
 def init (*args):
+    for o in models.Category.objects.all(): o.delete()
+    print 'DELTED ALL CATS'
+    for o in models.Triplet.objects.all(): o.delete()
+    print 'DELTED ALL TRIPLETS'    
+    for o in models.CategoryLink.objects.all(): o.delete()
+    print 'DELTED ALL CATLINKS'        
+    allcat = models.Category(name='All Verb Forms')
+    allcat.save()
     cat = models.Category(name='Spanish II Semester I Vocabulary')
     cat.save()
     ifi = file('unordered_first_161_words.txt','r')
@@ -22,12 +30,19 @@ def init (*args):
     cat.save()
     reg_verbs = [('hablar','talk'),('comer','eat'),('bailar','dance'),
                  ('besar','kiss'),('escupir','spit')]
+    irreg_verbs = [('poner','put'),
+                   ('venir','come'),
+                   ('ir','go'),('ser','be'),
+                   ('saber','know'),('dar','give'),('ver','see'),('querer','want'),
+                   ('poder','can')]
     for sp,eng in conjugations.make_verb_quiz(reg_verbs,
                                  conjugations.make_present,
                                  conjugations.make_eng_present):
-        print 'Adding',sp,eng
         t = models.Triplet(l1=eng,l2=sp); t.save()
         cl = models.CategoryLink(triplet=t,category=cat); cl.save()
+        cl = models.CategoryLink(triplet=t,category=allcat); cl.save()
+    cat2 = models.Category(name='Imperfect and Preterit Irregular Verbs')
+    cat2.save()
     cat = models.Category(name='Preterit Tense Regular Verbs')
     cat.save()
     for sp,eng in conjugations.make_verb_quiz(reg_verbs,
@@ -35,4 +50,26 @@ def init (*args):
                                  conjugations.make_eng_pret):
         t = models.Triplet(l1=eng,l2=sp); t.save()
         cl = models.CategoryLink(triplet=t,category=cat); cl.save()
+        cl = models.CategoryLink(triplet=t,category=cat2); cl.save()
+        cl = models.CategoryLink(triplet=t,category=allcat); cl.save()        
+    cat = models.Category(name='Preterit Tense Irregular Verbs')
+    cat.save()
+    for sp,eng in conjugations.make_verb_quiz(irreg_verbs,
+                                 conjugations.make_preterit,
+                                 conjugations.make_eng_pret):
+        t = models.Triplet(l1=eng,l2=sp); t.save()
+        cl = models.CategoryLink(triplet=t,category=cat); cl.save()
+        cl = models.CategoryLink(triplet=t,category=cat2); cl.save()
+        cl = models.CategoryLink(triplet=t,category=allcat); cl.save()        
+    cat = models.Category(name='Imperfect Verbs')
+    cat.save()
+    for sp,eng in conjugations.make_verb_quiz(reg_verbs+[
+        ('venir','come'),('poner','put'),('saber','know'),('dar','give'),('querer','want')],
+                                 conjugations.make_imperfect,
+                                 conjugations.make_eng_past_progr):
+        t = models.Triplet(l1=eng,l2=sp); t.save()
+        cl = models.CategoryLink(triplet=t,category=cat); cl.save()
+        cl = models.CategoryLink(triplet=t,category=cat2); cl.save()
+        cl = models.CategoryLink(triplet=t,category=allcat); cl.save()        
     return HttpResponseRedirect('/quiz/')
+

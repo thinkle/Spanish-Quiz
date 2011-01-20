@@ -30,16 +30,23 @@ eng_irregular_past = {
     }
 eng_irregular_past_simple = {
     'give':'gave','have':'had','write':'wrote','go':'went','feel':'felt',
-    'eat':'ate','know':'knew'
+    'eat':'ate','know':'knew','spit':'spit (past)','put':'put (past)',
+    'come':'came','can':'could','see':'saw',
     }
 
 # ENGLISH CONVENIENCE FUNCTS
 
 def make_eng_form_from_stem (inf, ending):
+    if inf[-1] in ['sz'] and ending=='s':
+        return inf+'e'+ending
     if inf.endswith('e') and inf.lower()!='be':
         return inf[:-1]+ending
     else:
-        return inf+ending
+        # double consonants for short vowels...
+        if inf[-1] in 'dgmnpt' and inf[-2] in 'aeiou' and not inf[-3] in 'aeiou':
+            return inf + inf[-1] + ending
+        else:
+            return inf+ending
 
 # ENGLISH CONJUGATIONS
 
@@ -79,6 +86,9 @@ preterit_irregular_stems = {
     'saber':'sup',
     'poner':'pus',
     'traer':'traj',
+    'poder':'pud',
+    'venir':'vin',
+    'querer':'quis',
     }
 
 present_irregular = {

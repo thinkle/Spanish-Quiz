@@ -76,7 +76,6 @@ def mc (request, category, reverse=False, prev=None, rightanswer=None):
     all_answers = [o.triplet for o in random.sample(my_links,3)] + [q_a]
     random.shuffle(all_answers)
     answer_rows = [[all_answers[0],all_answers[1]],[all_answers[2],all_answers[3]]]
-    print answer_rows
     return render_to_response(
         'simple_quiz.html',
         {'record':(TRIED and '%s/%s'%(CORRECT,TRIED) or ''),
@@ -101,7 +100,8 @@ def mc_answer (request):
         category = request.POST['category']
         target = request.POST['target']
         correct_answer = request.POST['correct_answer']        
-        reverse = bool(request.POST['reverse'])
+        reverse = request.POST['reverse']
+        print reverse,type(reverse)
         TRIED += 1
         if answer==correct_answer:
             CORRECT += 1
