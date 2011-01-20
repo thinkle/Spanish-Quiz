@@ -13,7 +13,7 @@ urlpatterns = patterns('',
                        ('mc/wrong/(\d*)$','quiz.views.mc_wrong'),
                        ('mc/answer/','quiz.views.mc_answer'),                       
                        ('quiz/','quiz.views.index'),
-                       ('^/$','quiz.views.index'),                       
+                       ('^$','quiz.views.index'),                       
                        ('init','quiz.quizmaker.init'),
 
     # Uncomment the admin/doc line below and add 'django.contrib.admindocs' 

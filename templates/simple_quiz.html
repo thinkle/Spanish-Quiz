@@ -1,8 +1,8 @@
 <html>
   <body>
-    <table style="margin: 3em">
+    <table style="margin: 3em" width="100%">
       <tr>
-	<td valign="top">
+	<td width="40%" valign="top" >
 
 	  <form action="/mc/answer/" method="post">
 	    <input type="hidden" name="category" value="{{category}}">
@@ -39,7 +39,7 @@
 	  </form>
 
 	</td>
-	<td>
+	<td width="60%">
 	  {% if reverse %}
 	  <a href="/mc/{{category}}/">Reverse!</a>
 	  {% else %}
@@ -48,13 +48,15 @@
 	  <a href="/quiz/">Choose another quiz</a>
 	  <p>Class Record is: {{record}}</p>
 	  {% if prev == 'right' %}
-	  <p>Correct!</p>
-	  <img src="http://rlv.zcache.com/dancing_penguins_card-p137325738401648753q0yk_400.jpg">
+	  <b><p>Correct!</p></b>
+	  <!-- <img src="http://rlv.zcache.com/dancing_penguins_card-p137325738401648753q0yk_400.jpg"> -->
+	  <b><span style="font-size:10em;color:yellow;background:black">:-)</span></b>
 	  {% endif %}
 	  {% if prev == 'wrong' %}
 	  <p>Sorry, you were wrong.</p>
-	  <p>{{rightanswer.l1}}={{rightanswer.l2}}</p>
-	  <img src="http://2.bp.blogspot.com/_91x7iXoXy_U/S9MmdgvyGSI/AAAAAAAAAkA/SH8EHgP9tWs/s1600/frown-front.jpg">
+	  <p><i><b>{{rightanswer.l1}}={{rightanswer.l2}}</b></i></p>
+	  <!--<img src="http://2.bp.blogspot.com/_91x7iXoXy_U/S9MmdgvyGSI/AAAAAAAAAkA/SH8EHgP9tWs/s1600/frown-front.jpg">-->
+	  <b><span style="font-size:10em;color:red;background:black">:-(</span></b>	  
 	  {% endif %}
 	</td>
       </tr>
