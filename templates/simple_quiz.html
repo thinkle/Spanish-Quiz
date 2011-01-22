@@ -1,8 +1,8 @@
 <html>
   <body>
-    <table style="margin: 3em" width="100%">
+    <table style="margin: 3em">
       <tr>
-	<td width="40%" valign="top" >
+	<td width="375px" valign="top" >
 
 	  <form action="/mc/answer/" method="post">
 	    <input type="hidden" name="category" value="{{category}}">
@@ -31,6 +31,7 @@
 			     {% else %}
 			     value="{{a.l2}}"
 			     {% endif %}
+			     style="font-size: 2em"
 			     >
 		    {% endfor %}
 		</tr>
@@ -39,7 +40,7 @@
 	  </form>
 
 	</td>
-	<td width="60%">
+	<td>
 	  {% if reverse %}
 	  <a href="/mc/{{category}}/">Reverse!</a>
 	  {% else %}
@@ -50,13 +51,13 @@
 	  {% if prev == 'right' %}
 	  <b><p>Correct!</p></b>
 	  <!-- <img src="http://rlv.zcache.com/dancing_penguins_card-p137325738401648753q0yk_400.jpg"> -->
-	  <b><span style="font-size:10em;color:yellow;background:black">:-)</span></b>
+	  <b><span style="font-size:3em;color:yellow;background:black">:-)</span></b>
 	  {% endif %}
 	  {% if prev == 'wrong' %}
 	  <p>Sorry, you were wrong.</p>
 	  <p><i><b>{{rightanswer.l1}}={{rightanswer.l2}}</b></i></p>
 	  <!--<img src="http://2.bp.blogspot.com/_91x7iXoXy_U/S9MmdgvyGSI/AAAAAAAAAkA/SH8EHgP9tWs/s1600/frown-front.jpg">-->
-	  <b><span style="font-size:10em;color:red;background:black">:-(</span></b>	  
+	  <b><span style="font-size:3em;color:red;background:black">:-(</span></b>	  
 	  {% endif %}
 	</td>
       </tr>
