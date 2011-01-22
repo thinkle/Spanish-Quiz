@@ -5,9 +5,32 @@ if socket.gethostname() == 'pebble':
     print 'My laptop'
     DEBUG = True
     TEMPLATE_DEBUG = DEBUG
+    TEMPLATE_DIRS = (
+        # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
+        # Always use forward slashes, even on Windows.
+        # Don't forget to use absolute paths, not relative paths.
+        '/home/tom/Projects/quizlet/templates/'
+        )
+    
+elif socket.gethostname() == 'grenville':
+    print 'My Desktop'
+    DEBUG = True
+    TEMPLATE_DEBUG = DEBUG
+    TEMPLATE_DIRS = (
+        # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
+        # Always use forward slashes, even on Windows.
+        # Don't forget to use absolute paths, not relative paths.
+        '/home/tom/Projects/quizlet/templates/'
+        )    
 else:
     print 'Not my laptop'
     DEBUG = TEMPLATE_DEBUG =  False
+    TEMPLATE_DIRS = (
+        # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
+        # Always use forward slashes, even on Windows.
+        # Don't forget to use absolute paths, not relative paths.
+        '/home/thinkle/quizlet/templates/'
+        )    
     
 
 ADMINS = (
@@ -72,12 +95,6 @@ MIDDLEWARE_CLASSES = (
 
 ROOT_URLCONF = 'quizlet.urls'
 
-TEMPLATE_DIRS = (
-    # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
-    # Always use forward slashes, even on Windows.
-    # Don't forget to use absolute paths, not relative paths.
-    '/home/tom/Projects/quizlet/templates/'
-)
 
 INSTALLED_APPS = (
     'quiz',
