@@ -17,7 +17,7 @@ class CategoryLink (models.Model):
     category = models.ForeignKey(Category)
 
 class QuizData (models.Model):
-    user = models.ForeignKey(User)
+    user = models.ForeignKey(User,null=True)
     triplet = models.ForeignKey(Triplet)
     reverse = models.BooleanField()
     answer_time = models.DateTimeField('time of answer')

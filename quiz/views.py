@@ -64,7 +64,7 @@ def logout_user (request):
     logout(request)
     return HttpResponseRedirect('/')
 
-@login_required
+#@login_required
 def profile (request):
     if request.method == 'POST':
         uf = UserForm(request.POST,instance=request.user)
@@ -86,14 +86,22 @@ def index (request):
 def mc_r (request, category, reverse=False, rightanswer=None, lastanswer=None):
     return mc(request, category, reverse=True, prev=prev, rightanswer=rightanswer, lastanswer=lastanswer)
 
-@login_required
+#@login_required
 def mc (request, category, reverse=False, rightanswer=None, lastanswer=None):
-    print 'USER:',request.user.id,'EMAIL',request.user.email,'fn:',request.user.first_name,'ln:',request.user.last_name
-    uoid = UserOpenID.objects.get(user=request.user)
+    try:
+        uoid = UserOpenID.objects.get(user=request.user)
+    except:
+        class o:
+            pass
+        uoid = o()
+        uoid.display_id = 'None'
+        uoid.claimed_id=None
     print 'DID:',uoid.display_id,'CID:',uoid.claimed_id
-    TRIED = len(models.QuizData.objects.filter(user=request.user))
-    CORRECT = len(models.QuizData.objects.filter(user=request.user,correct=True))
-    #global TRIED,CORRECT
+    if uoid.claimed_id:
+        TRIED = len(models.QuizData.objects.filter(user=request.user))
+        CORRECT = len(models.QuizData.objects.filter(user=request.user,correct=True))
+    else:
+        global TRIED,CORRECT
     category = int(category)
     cat = models.Category.objects.get(id=category)
     catlinks = models.CategoryLink.objects.filter(category=cat)[:]
@@ -127,6 +135,7 @@ def mc (request, category, reverse=False, rightanswer=None, lastanswer=None):
 
 def mc_answer (request):
     if request.method == 'POST':
+        global TRIED,CORRECT
         answer = request.POST['answer']
         category = request.POST['category']
         target = request.POST['target']
@@ -138,7 +147,8 @@ def mc_answer (request):
         speed = current_time - atime
         if reverse=='False': reverse = False
         else: reverse = True
-        qd = models.QuizData(user=request.user,
+        try:
+            qd = models.QuizData(user=request.user,
                              triplet=models.Triplet.objects.get(id=target),
                              reverse=reverse,
                              correct=(answer==correct_answer),
@@ -146,9 +156,19 @@ def mc_answer (request):
                              answer_time=datetime.datetime.today(),
 
                              )
+        except:
+            qd = models.QuizData(
+                             triplet=models.Triplet.objects.get(id=target),
+                             reverse=reverse,
+                             correct=(answer==correct_answer),
+                             speed=speed,
+                             answer_time=datetime.datetime.today(),
+                             )
         
         qd.save()
+        TRIED += 1
         if answer==correct_answer:
+            CORRECT += 1
             prev='right'
         else:
             prev='wrong'
