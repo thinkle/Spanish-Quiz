@@ -7,6 +7,7 @@ from django.conf.urls.defaults import *
 urlpatterns = patterns('',
     # Example:
     # (r'^quizlet/', include('quizlet.foo.urls')),
+                       (r'^logout/$','quiz.views.logout_user'),
                        ('mc/(\d*)/$','quiz.views.mc'),
                        ('mc/(\d*)/r/$','quiz.views.mc_r'),                       
                        ('mc/right/(\d*)$','quiz.views.mc_right'),
@@ -15,6 +16,7 @@ urlpatterns = patterns('',
                        ('quiz/','quiz.views.index'),
                        ('^$','quiz.views.index'),                       
                        ('init','quiz.quizmaker.init'),
+                       (r'^openid/', include('django_openid_auth.urls')),
 
     # Uncomment the admin/doc line below and add 'django.contrib.admindocs' 
     # to INSTALLED_APPS to enable admin documentation:
@@ -23,3 +25,5 @@ urlpatterns = patterns('',
     # Uncomment the next line to enable the admin:
     # (r'^admin/', include(admin.site.urls)),
 )
+
+
