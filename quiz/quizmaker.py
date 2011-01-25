@@ -70,6 +70,24 @@ def init (*args):
         t = models.Triplet(l1=eng,l2=sp); t.save()
         cl = models.CategoryLink(triplet=t,category=cat); cl.save()
         cl = models.CategoryLink(triplet=t,category=cat2); cl.save()
-        cl = models.CategoryLink(triplet=t,category=allcat); cl.save()        
+        cl = models.CategoryLink(triplet=t,category=allcat); cl.save()
+    psub = models.Category(name='Past Subjunctive/Pasado del subjuntivo'); psub.save()
+    cond = models.Category(name='Conditional/Potencial'); cond.save()
+    psub_cond = models.Category(name='Past Subjunctive + Conditional'); psub_cond.save()
+    for sp,eng in conjugations.make_verb_quiz(reg_verbs +
+                                              [('venir','come'),('poner','put'),('saber','know'),('dar','give'),('querer','want'),('tener','have')],
+                                              conjugations.make_past_subjunctive,
+                                              conjugations.make_eng_past_subj):
+        t = models.Triplet(l1=eng,l2=sp); t.save()
+        cl = models.CategoryLink(triplet=t,category=psub_cond); cl.save()
+        cl = models.CategoryLink(triplet=t,category=psub); cl.save()
+    for sp,eng in conjugations.make_verb_quiz(reg_verbs +
+                                              [('venir','come'),('poner','put'),('saber','know'),('dar','give'),('querer','want'),('tener','have')],
+                                              conjugations.make_conditional,
+                                              conjugations.make_eng_cond):
+        t = models.Triplet(l1=eng,l2=sp); t.save()
+        cl = models.CategoryLink(triplet=t,category=psub_cond); cl.save()
+        cl = models.CategoryLink(triplet=t,category=cond); cl.save()        
+        
     return HttpResponseRedirect('/quiz/')
 

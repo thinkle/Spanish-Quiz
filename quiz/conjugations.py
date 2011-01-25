@@ -69,8 +69,8 @@ def make_eng_pret (inf, person):
 def make_eng_past_progr (inf, person):
     return ENG_SUBJ_PRO[person] + ' ' + eng_irregular_past['be'][person] + ' ' + make_eng_form_from_stem(inf,'ing')
 
-def make_eng_subj (inf, person):
-    return make_eng_pret('be',person) + " to " + inf
+def make_eng_past_subj (inf, person):
+    return ENG_SUBJ_PRO[person] + " were to " + inf
 
 def make_eng_cond (inf, person):
     return ENG_SUBJ_PRO[person] + ' would ' + inf
@@ -78,11 +78,15 @@ def make_eng_cond (inf, person):
 ### SPANISH DATA ###
 
 FUT_ROOT = {
+    'decir':'dir',
+    'hacer':'har',
     'poder':'podr',
-    'tener':'tendr',
-    'saber':'sabr',
-    'venir':'vendr',
     'poner':'pondr',
+    'querer':'querr',
+    'saber':'sabr',
+    'salir':'saldr',
+    'tener':'tendr',
+    'venir':'vendr',
     }
 
 consonants = 'bcdfghjklmnñpqrstvxyz'
@@ -219,8 +223,16 @@ def make_past_subjunctive (inf, person):
     form = form.replace('ieramos','iéramos')
     return form
 
+def make_future (inf, person):
+    endings = conjdic('é','ás','á','emos','éis','án')
+    root = FUT_ROOT.get(inf,inf)
+    return root + endings[person]
+
 def make_conditional (inf, person):
-    pass
+    endings = conjdic('ía','ías','ía','íamos','íais','ían')
+    root = FUT_ROOT.get(inf,inf)
+    return root + endings[person]
+
 
 def make_verb_quiz (infinitives, spanish_func, english_func):
     quiz = []
