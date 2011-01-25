@@ -87,6 +87,21 @@ TEMPLATE_LOADERS = (
 #     'django.template.loaders.eggs.load_template_source',
 )
 
+
+AUTHENTICATION_BACKENDS = (
+    'django_openid_auth.auth.OpenIDBackend',
+    'django.contrib.auth.backends.ModelBackend',
+    )
+
+OPENID_UPDATE_DETAILS_FROM_SREG = True
+OPENID_CREATE_USERS = True
+#OPENID_SSO_SERVER_URL = 'https://login.launchpad.net/'
+OPENID_SSO_SERVER_URL = 'https://www.google.com/accounts/o8/site-xrds?hd=innovationcharter.org'
+
+LOGIN_URL = '/openid/login/'
+LOGIN_REDIRECT_URL = '/'
+OPENID_SSO_SERVER_URL = 'https://www.google.com/accounts/o8/id'
+
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -95,11 +110,12 @@ MIDDLEWARE_CLASSES = (
 
 ROOT_URLCONF = 'quizlet.urls'
 
-
 INSTALLED_APPS = (
     'quiz',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.sites',
+    'django_openid_auth',
 )
+
