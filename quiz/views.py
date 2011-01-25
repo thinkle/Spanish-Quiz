@@ -1,10 +1,13 @@
 # -*- coding: utf-8
 from django.http import HttpResponse, HttpResponseRedirect
 from django import forms
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import logout
 from django.shortcuts import render_to_response
 from django.template import Context, loader
+from django_openid_auth.models import UserOpenID
 import sys
-import re, random
+import re, random, datetime,time
 from django.utils import simplejson
 import models
 
@@ -48,22 +51,32 @@ def init (*args):
         cl = models.CategoryLink(triplet=t,category=cat)
     return HttpResponseRedirect('/quiz/')
     
+def logout_user (request):
+    logout(request)
+    return HttpResponseRedirect('/')
+
 def index (request):
     cats = models.Category.objects.all()
     return render_to_response(
         'index.html',
         {'data':cats})
 
-def mc_r (request, category, reverse=False, prev=None, rightanswer=None):
-    return mc(request, category, reverse=True, prev=prev, rightanswer=rightanswer)
+def mc_r (request, category, reverse=False, rightanswer=None, lastanswer=None):
+    return mc(request, category, reverse=True, prev=prev, rightanswer=rightanswer, lastanswer=lastanswer)
 
-def mc (request, category, reverse=False, prev=None, rightanswer=None):
+@login_required
+def mc (request, category, reverse=False, rightanswer=None, lastanswer=None):
+    print 'USER:',request.user.id,'EMAIL',request.user.email,'fn:',request.user.first_name,'ln:',request.user.last_name
+    uoid = UserOpenID.objects.get(user=request.user)
+    print 'DID:',uoid.display_id,'CID:',uoid.claimed_id
+    TRIED = len(models.QuizData.objects.filter(user=request.user))
+    CORRECT = len(models.QuizData.objects.filter(user=request.user,correct=True))
+    #global TRIED,CORRECT
     category = int(category)
     cat = models.Category.objects.get(id=category)
     catlinks = models.CategoryLink.objects.filter(category=cat)[:]
     my_links = []
     for cl in catlinks:
-        print 'Adding catlink!'
         my_links.append(cl)
     try:
         assert(my_links)
@@ -82,36 +95,43 @@ def mc (request, category, reverse=False, prev=None, rightanswer=None):
          'category':category,
          'target':q_a,
          'answer_rows':answer_rows,
-         'prev':prev,
          'reverse':reverse,
          'rightanswer':rightanswer,
+         'time':time.time(),
+         'lastanswer':lastanswer,
          })
 
-def mc_right (request,category):
-    return mc(request,category,prev='right')
-
-def mc_wrong (request,category):
-    return mc(request,category,prev='wrong')
-         
 def mc_answer (request):
-    global CORRECT,TRIED
     if request.method == 'POST':
         answer = request.POST['answer']
         category = request.POST['category']
         target = request.POST['target']
         correct_answer = request.POST['correct_answer']        
         reverse = request.POST['reverse']
-        print reverse,type(reverse)
-        TRIED += 1
-        if answer==correct_answer:
-            CORRECT += 1
-            return mc(request,category=category,reverse=reverse,
-                      prev='right')
+        atime = request.POST['time']
+        atime = float(atime)
+        current_time = time.time()
+        speed = current_time - atime
+        if reverse=='False': reverse = False
+        else: reverse = True
+        qd = models.QuizData(user=request.user,
+                             triplet=models.Triplet.objects.get(id=target),
+                             reverse=reverse,
+                             correct=(answer==correct_answer),
+                             speed=speed,
+                             answer_time=datetime.datetime.today(),
 
+                             )
+        
+        qd.save()
+        if answer==correct_answer:
+            prev='right'
         else:
-            return mc(request,category=category,reverse=reverse,
-                      rightanswer=models.Triplet.objects.get(id=target),
-                      prev='wrong')
+            prev='wrong'
+        return mc(request,category=category,reverse=reverse,rightanswer=models.Triplet.objects.get(id=target),
+                  lastanswer=qd)
+    else:
+        return HttpResponseRedirect('/')
 
 
 
