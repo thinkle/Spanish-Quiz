@@ -6,6 +6,8 @@ from django.contrib.auth import logout
 from django.shortcuts import render_to_response
 from django.template import Context, loader
 from django_openid_auth.models import UserOpenID
+from django.contrib.auth.models import User
+from django.forms import ModelForm
 import sys
 import re, random, datetime,time
 from django.utils import simplejson
@@ -51,9 +53,29 @@ def init (*args):
         cl = models.CategoryLink(triplet=t,category=cat)
     return HttpResponseRedirect('/quiz/')
     
+# User stuff
+
+class UserForm (ModelForm):
+    class Meta:
+        model = User
+        fields = ["first_name","last_name","email"]
+
 def logout_user (request):
     logout(request)
     return HttpResponseRedirect('/')
+
+@login_required
+def profile (request):
+    if request.method == 'POST':
+        uf = UserForm(request.POST,instance=request.user)
+        if uf.is_valid():
+            uf.save()
+        return HttpResponseRedirect('/')
+    else:
+        uf = UserForm(instance=request.user)
+    return render_to_response('profile.html',{'uf':uf})
+
+# Quiz stuff
 
 def index (request):
     cats = models.Category.objects.all()
@@ -99,6 +121,8 @@ def mc (request, category, reverse=False, rightanswer=None, lastanswer=None):
          'rightanswer':rightanswer,
          'time':time.time(),
          'lastanswer':lastanswer,
+         'user':request.user,
+         'uoid':uoid.display_id,
          })
 
 def mc_answer (request):

@@ -69,8 +69,21 @@ def make_eng_pret (inf, person):
 def make_eng_past_progr (inf, person):
     return ENG_SUBJ_PRO[person] + ' ' + eng_irregular_past['be'][person] + ' ' + make_eng_form_from_stem(inf,'ing')
 
+def make_eng_subj (inf, person):
+    return make_eng_pret('be',person) + " to " + inf
+
+def make_eng_cond (inf, person):
+    return ENG_SUBJ_PRO[person] + ' would ' + inf
 
 ### SPANISH DATA ###
+
+FUT_ROOT = {
+    'poder':'podr',
+    'tener':'tendr',
+    'saber':'sabr',
+    'venir':'vendr',
+    'poner':'pondr',
+    }
 
 consonants = 'bcdfghjklmnñpqrstvxyz'
 
@@ -185,7 +198,6 @@ def make_preterit (inf, person):
                      er_stems = {FPS:'í',SPS:'iste',TPS:'ió',
                                  FPP:'imos',SPP:'isteis',TPP:'ieron'})
 
-
 def make_present_subjunctive (inf, person):
     if inf == 'ser': inf = 'seer'
     elif inf == 'ver': inf = 'veer'
@@ -206,6 +218,9 @@ def make_past_subjunctive (inf, person):
     form = form.replace('aramos','áramos')
     form = form.replace('ieramos','iéramos')
     return form
+
+def make_conditional (inf, person):
+    pass
 
 def make_verb_quiz (infinitives, spanish_func, english_func):
     quiz = []

@@ -100,7 +100,6 @@ OPENID_SSO_SERVER_URL = 'https://www.google.com/accounts/o8/site-xrds?hd=innovat
 
 LOGIN_URL = '/openid/login/'
 LOGIN_REDIRECT_URL = '/'
-OPENID_SSO_SERVER_URL = 'https://www.google.com/accounts/o8/id'
 
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
