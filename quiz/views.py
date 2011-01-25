@@ -84,7 +84,7 @@ def index (request):
         {'data':cats})
 
 def mc_r (request, category, reverse=False, rightanswer=None, lastanswer=None):
-    return mc(request, category, reverse=True, prev=prev, rightanswer=rightanswer, lastanswer=lastanswer)
+    return mc(request, category, reverse=True, rightanswer=rightanswer, lastanswer=lastanswer)
 
 #@login_required
 def mc (request, category, reverse=False, rightanswer=None, lastanswer=None):
@@ -116,6 +116,10 @@ def mc (request, category, reverse=False, rightanswer=None, lastanswer=None):
     random.shuffle(my_links)
     q_a = my_links.pop()
     q_a = q_a.triplet
+    # Very lame attempt to make choices harder (more similar to each other)
+    my_similar_links = filter(lambda x: x.triplet.l2.startswith(q_a.l2[0]), my_links)
+    if len(my_similar_links) >= 3:
+        my_links = my_similar_links
     all_answers = [o.triplet for o in random.sample(my_links,3)] + [q_a]
     random.shuffle(all_answers)
     answer_rows = [[all_answers[0],all_answers[1]],[all_answers[2],all_answers[3]]]

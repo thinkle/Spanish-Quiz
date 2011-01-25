@@ -42,12 +42,15 @@
 
 	</td>
 	<td>
-	  {% if user.first_name %}
-	  <p>You are logged in as {{user.first_name}} {{user.last_name}}
-	  {% endif %}
-	  <p>You are logged in as {{uoid}}
-	    (<a href="/logout/">Logout</a>) </p>
-	  {% if reverse %}
+	  {% if uuoid %}
+	  
+	    {% if user.first_name %}
+	    <p>You are logged in as {{user.first_name}} {{user.last_name}}</p>
+	    {% endif %}
+	    <p>You are logged in as {{uoid}}
+	      (<a href="/logout/">Logout</a>) </p>
+	 {% endif %}
+	 {% if reverse %}
 	  <a href="/mc/{{category}}/">Reverse!</a>
 	  {% else %}
 	  <a href="/mc/{{category}}/r">Reverse!</a>
