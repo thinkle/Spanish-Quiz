@@ -1,0 +1,17 @@
+<html>
+  <h2>Edit Profile</h2>
+  <p>You've been logged in with your IACS email account (you might want to make sure
+    you actually logged in as yourself!). My program will use your IACS login to authenticate you in the future. Please enter your first name, last name and email so my program can be more friendly to you, and, in future versions, email you statistics and other important information.</p>
+<p>
+  <form enctype="multipart/form-data" action="/profile/" method="POST">
+
+    <table>
+    {{uf.as_table}}
+
+
+    <tr><td/><td align="right"><input type="submit" value="Save" id="submit"/>    </td></tr>
+    </table>
+
+  </form>
+</p>
+</html>
