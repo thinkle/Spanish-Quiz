@@ -19,6 +19,7 @@ class CategoryLink (models.Model):
 class QuizData (models.Model):
     user = models.ForeignKey(User)
     triplet = models.ForeignKey(Triplet)
+    reverse = models.BooleanField()
     answer_time = models.DateTimeField('time of answer')
     correct = models.BooleanField()
     speed = models.IntegerField()
