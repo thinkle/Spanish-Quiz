@@ -7,7 +7,8 @@
 	  <form action="/mc/answer/" method="post">
 	    <input type="hidden" name="category" value="{{category}}">
 	    <input type="hidden" name="target" value="{{target.id}}">
-	    <input type="hidden" name="reverse" value="{{reverse}}">	    
+	    <input type="hidden" name="reverse" value="{{reverse}}">
+	    <input type="hidden" name="time" value="{{time}}">	    	    
 	    <p><span style="font-size:3 em"><b>
 		  {% if reverse %}
 		  {{target.l2}}
@@ -41,23 +42,26 @@
 
 	</td>
 	<td>
+	  <a href="/logout/">Logout</a><br>
 	  {% if reverse %}
 	  <a href="/mc/{{category}}/">Reverse!</a>
 	  {% else %}
 	  <a href="/mc/{{category}}/r">Reverse!</a>
 	  {% endif %}
 	  <a href="/quiz/">Choose another quiz</a>
-	  <p>Class Record is: {{record}}</p>
-	  {% if prev == 'right' %}
+	  <p>Your Record is: {{record}}</p>
+	  {% if lastanswer %}
+	  {% if lastanswer.correct %}
 	  <b><p>Correct!</p></b>
 	  <!-- <img src="http://rlv.zcache.com/dancing_penguins_card-p137325738401648753q0yk_400.jpg"> -->
 	  <b><span style="font-size:3em;color:yellow;background:black">:-)</span></b>
-	  {% endif %}
-	  {% if prev == 'wrong' %}
+	  {% else %}
 	  <p>Sorry, you were wrong.</p>
 	  <p><i><b>{{rightanswer.l1}}={{rightanswer.l2}}</b></i></p>
 	  <!--<img src="http://2.bp.blogspot.com/_91x7iXoXy_U/S9MmdgvyGSI/AAAAAAAAAkA/SH8EHgP9tWs/s1600/frown-front.jpg">-->
 	  <b><span style="font-size:3em;color:red;background:black">:-(</span></b>	  
+	  {% endif %}
+	  <p>You answered in {{lastanswer.speed}} seconds</p>
 	  {% endif %}
 	</td>
       </tr>
