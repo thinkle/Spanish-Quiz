@@ -64,7 +64,7 @@ def logout_user (request):
     logout(request)
     return HttpResponseRedirect('/')
 
-#@login_required
+@login_required
 def profile (request):
     if request.method == 'POST':
         uf = UserForm(request.POST,instance=request.user)
@@ -86,7 +86,7 @@ def index (request):
 def mc_r (request, category, reverse=False, rightanswer=None, lastanswer=None):
     return mc(request, category, reverse=True, rightanswer=rightanswer, lastanswer=lastanswer)
 
-#@login_required
+@login_required
 def mc (request, category, reverse=False, rightanswer=None, lastanswer=None):
     try:
         uoid = UserOpenID.objects.get(user=request.user)
