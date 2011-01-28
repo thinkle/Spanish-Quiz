@@ -1,3 +1,13 @@
+2011-01-28  Thomas Mills Hinkle  <tom@pebble>
+
+	* templates/stats.html: Add all_stats template.
+
+	* quiz/views.py (all_stats): Add all_stats
+
+	* quiz/conjugations.py (make_past_subjunctive): Fix past subj. forms.
+
+	* urls.py (urlpatterns): add all_stats
+
 2011-01-28  Tom  <tom@localhost6.localdomain6>
 
 	* quiz/views.py (Stats): Create class to aid in the display of

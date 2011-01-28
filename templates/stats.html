@@ -1,0 +1,24 @@
+<html>
+  <table border="1px solid black">
+    {% for stat in stats %}
+    <tr>
+      <td>
+	{{stat.user.first_name}} {{stat.user.last_name}} {{stat.user.email}}
+      </td>
+      <td>
+	<p>Category {{stat.cat.name}}: {{stat.category.ratio}} ({{stat.category.perc}})</p>
+	{% if stat.last_hour.ratio != stat.overall.ratio %}
+	<p>Record in last hour is: {{stat.last_hour.ratio}} ({{stat.last_hour.perc}})</p>
+	{% endif %}
+	{% if stat.last_day.ratio != stat.overall.ratio and stat.last_day.ratio != stat.last_hour.ratio %}
+	<p>Record in last day is: {{stat.last_day.ratio}} ({{stat.last_day.perc}})</p>
+	{% endif %}
+	{% if stat.last_week.ratio != stat.overall.ratio and stat.last_week.ratio != stat.last_day.ratio %}	    
+	    <p>Record in last week is: {{stat.last_week.ratio}} ({{stat.last_week.perc}})</p>
+	    {% endif %}
+	    <p>All time record: {{stat.overall.ratio}} ({{stat.overall.perc}})</p>
+      </td>
+    </tr>
+    {% endfor %}
+  </table>
+</html>

@@ -291,6 +291,29 @@ def mc (request, category, reverse=False, rightanswer=None, lastanswer=None):
          'uoid':uoid.display_id,
          })
 
+def all_stats (request, category=None):
+    stats = []
+    for user in User.objects.all():
+        print user,user.first_name
+        if not category:
+            try:
+                category = models.QuizData.objects.filter(user=user)[0].triplet.category
+            except:
+                category = models.Category.objects.all()[0]
+        s = Stats(category,user)
+        s.fetch_props(
+            'last_day.ratio','last_day.perc',
+            'last_hour.ratio','last_hour.perc',
+            'last_week.ratio','last_week.perc',            
+            'overall.ratio','overall.perc',
+            'category.ratio','category.perc'
+            )
+        stats.append(s)
+    print 'stats=',stats
+    return render_to_response('stats.html',{'stats':stats})
+
+        
+
 def mc_answer (request):
     if request.method == 'POST':
         global TRIED,CORRECT

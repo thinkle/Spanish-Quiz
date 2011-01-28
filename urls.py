@@ -8,6 +8,7 @@ urlpatterns = patterns('',
     # Example:
     # (r'^quizlet/', include('quizlet.foo.urls')),
                        (r'^profile/$','quiz.views.profile'),
+                       (r'^all_stats/$','quiz.views.all_stats'),                       
                        #(r'^logout/$','quiz.views.logout_user'),
                        (r'^logout/$','django.contrib.auth.views.logout', {'next_page':'/'}),
                        ('mc/(\d*)/$','quiz.views.mc'),

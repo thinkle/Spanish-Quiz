@@ -217,7 +217,7 @@ def make_present_subjunctive (inf, person):
 
 def make_past_subjunctive (inf, person):
     root = make_preterit(inf,TPP)[:-2]
-    stems = conjdic('a','as','a','amos','an')
+    stems = conjdic('a','as','a','amos','ais','an')
     form = root + stems[person]
     form = form.replace('aramos','áramos')
     form = form.replace('ieramos','iéramos')
