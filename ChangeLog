@@ -1,0 +1,8 @@
+2011-01-28  Tom  <tom@localhost6.localdomain6>
+
+	* quiz/views.py (Stats): Create class to aid in the display of
+	user stats.
+	(mc): Refactor and refine code -- separate methods now exist for
+	choosing questions, getting stats, etc.
+	* settings.py Add profile information.
+

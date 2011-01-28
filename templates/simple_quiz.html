@@ -42,16 +42,20 @@
 
 	</td>
 	<td>
-	    <p>You are logged in as {{user.first_name}} {{user.last_name}}</p>
-	    <p>You are logged in as {{uoid}}
-	      (<a href="/logout/">Logout</a>) </p>
+	    <p>You are logged in as {{user.first_name}} {{user.last_name}}
+	    {% if not user.first_name %}
+	    <a href="/profile/">Tell me your name so I can remember you</a>
+	    {% endif %}
+	    (<a href="/logout/">Logout</a>)
+	    </p>
+	    <p style="font-size:smaller">You are logged in as IACS ID {{uoid}}
+	       </p>
 	 {% if reverse %}
 	  <a href="/mc/{{category}}/">Reverse!</a>
 	  {% else %}
 	  <a href="/mc/{{category}}/r">Reverse!</a>
 	  {% endif %}
 	  <a href="/quiz/">Choose another quiz</a>
-	  <p>Your Record is: {{record}}</p>
 	  {% if lastanswer %}
 	  {% if lastanswer.correct %}
 	  <b><p>Correct!</p></b>
@@ -63,8 +67,27 @@
 	  <!--<img src="http://2.bp.blogspot.com/_91x7iXoXy_U/S9MmdgvyGSI/AAAAAAAAAkA/SH8EHgP9tWs/s1600/frown-front.jpg">-->
 	  <b><span style="font-size:3em;color:red;background:black">:-(</span></b>	  
 	  {% endif %}
-	  <p>You answered in {{lastanswer.speed}} seconds</p>
+	  <p>You answered in {{lastanswer.speed|floatformat:1}} seconds</p>
 	  {% endif %}
+	  <div class="stats" style="border:1px solid black">
+	    <p>Record for {{stats.cat.name}}: {{stats.category.ratio}} ({{stats.category.perc}})</p>
+	    {% if stats.last_hour.ratio != stats.overall.ratio %}
+	    <p>Record in last hour is: {{stats.last_hour.ratio}} ({{stats.last_hour.perc}})</p>
+	    {% endif %}
+	    {% if stats.last_day.ratio != stats.overall.ratio and stats.last_day.ratio != stats.last_hour.ratio %}
+	    <p>Record in last day is: {{stats.last_day.ratio}} ({{stats.last_day.perc}})</p>
+	    {% endif %}
+	    {% if stats.last_week.ratio != stats.overall.ratio and stats.last_week.ratio != stats.last_day.ratio %}	    
+	    <p>Record in last week is: {{stats.last_week.ratio}} ({{stats.last_week.perc}})</p>
+	    {% endif %}
+	    <p>All time record: {{stats.overall.ratio}} ({{stats.overall.perc}})</p>
+	    {% if stats.previous_attempts %}
+	    <p>Your trackrecord on this question is: <span style="fontsize:smaller">
+		{{stats.previous_attempt_history }}
+	    </span></p>
+	    {% endif %}
+	  </div>
+	  
 	</td>
       </tr>
     </table>

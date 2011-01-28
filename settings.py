@@ -99,7 +99,7 @@ OPENID_CREATE_USERS = True
 OPENID_SSO_SERVER_URL = 'https://www.google.com/accounts/o8/site-xrds?hd=innovationcharter.org'
 
 LOGIN_URL = '/openid/login/'
-LOGIN_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = '/profile/'
 
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
