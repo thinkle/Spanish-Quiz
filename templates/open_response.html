@@ -1,5 +1,5 @@
 {% include "quiz_header.html" %}
-	  <form action="/mc/answer/" method="post">
+	  <form action="/or/answer/" method="post">
 	    <input type="hidden" name="category" value="{{category}}">
 	    <input type="hidden" name="target" value="{{target.id}}">
 	    <input type="hidden" name="reverse" value="{{reverse}}">
@@ -18,20 +18,10 @@
 				 {% endif %}
 				 >
 	      <table>
-		{% for arow in answer_rows %}
 		<tr>
-		  {% for a in arow%}
-		  <td><input type="submit" name="answer"
-			     {% if reverse %}
-			     value="{{a.l1}}"
-			     {% else %}
-			     value="{{a.l2}}"
-			     {% endif %}
-			     style="font-size: 2em"
-			     >
-		    {% endfor %}
+		  <td><input type="entry" name="answer"></td>
+		  <td><input type="submit" value="submit"></td>
 		</tr>
-		{% endfor %}
 	      </table>
 	  </form>
 {% include "quiz_footer.html" %}

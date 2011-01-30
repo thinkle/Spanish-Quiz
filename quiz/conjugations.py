@@ -92,11 +92,11 @@ FUT_ROOT = {
 consonants = 'bcdfghjklmnñpqrstvxyz'
 
 preterit_irregular = {
-    'ser':conjdic('fui','fuiste','fue','fuimos','fuisteis','fueron'),
+    'ser':conjdic('(de ser) fui','(de ser) fuiste','(de ser) fue','(de ser) fuimos','(de ser) fuisteis','(de ser) fueron'),
+    'ir':conjdic('(de ir) fui','(de ir) fuiste','(de ir) fue','(de ir) fuimos','(de ir) fuisteis','(de ir) fueron'),    
     'ver':conjdic('vi','viste','vio','vimos','visteis','vieron'),
     'dar':conjdic('di','diste','dio','dimos','disteis','dieron'),
     }
-preterit_irregular['ir']=preterit_irregular['ser']
 
 preterit_irregular_stems = {
     'tener':'tuv',
@@ -106,18 +106,28 @@ preterit_irregular_stems = {
     'poder':'pud',
     'venir':'vin',
     'querer':'quis',
+    'haber':'hub',
     }
 
 present_irregular = {
     'ser':conjdic('soy','eres','es','somos','sois','son'),
     'ir':conjdic('voy','vas','va','vamos','vais','van'),
     'ver':conjdic('veo','ves','ve','vemos','veis','ven'),
+    'haber':conjdic('he','has','ha','hemos','habeis','han'),
     }
 
 present_irregular_yo = {
     'dar':'doy',
     'poner':'pongo',
     'conocer':'conozco'
+    }
+
+irregular_participle = {
+    'escribir':'escrito',
+    'hacer':'hecho',
+    'poner':'puesto',
+    'ver':'visto',
+    'volver':'vuelto',
     }
 
 stem_change = {
@@ -206,14 +216,14 @@ def make_present_subjunctive (inf, person):
     if inf == 'ser': inf = 'seer'
     elif inf == 'ver': inf = 'veer'
     elif inf == 'ir': inf = 'vayer'
+    elif inf == 'haber': inf = 'hayer'
     elif present_irregular_yo.has_key(inf):
         stems = conjdic('a','as','a','amos','áis','an')
         return make_present(inf,FPS)[:-1] + stems[person]
-    else:
-        return make_verb(inf,person,
-                         ar_stems=conjdic('e','es','e','emos','éis','en'),
-                         er_stems=conjdic('a','as','a','amos','áis','an')
-                         )
+    return make_verb(inf,person,
+                     ar_stems=conjdic('e','es','e','emos','éis','en'),
+                     er_stems=conjdic('a','as','a','amos','áis','an')
+                     )
 
 def make_past_subjunctive (inf, person):
     root = make_preterit(inf,TPP)[:-2]
@@ -232,6 +242,26 @@ def make_conditional (inf, person):
     endings = conjdic('ía','ías','ía','íamos','íais','ían')
     root = FUT_ROOT.get(inf,inf)
     return root + endings[person]
+
+def make_past_participle (inf):
+    if irregular_participle.has_key(inf):
+        return irregular_participle[inf]
+    elif inf[-2:]=='ar':
+        return inf[:-1]+'do'
+    else:
+        return inf[:-2]+'ido'
+
+def make_antepresente (inf, person):
+    return make_present('haber',person) + ' ' + make_past_participle(inf)
+
+def make_antepasado (inf, person):
+    return make_imperfect('haber',person) + ' ' + make_past_participle(inf)
+
+def make_antepasado_subjuntivo (inf, person):
+    return make_past_subjunctive('haber',person) + ' ' + make_past_participle(inf)
+
+def make_antepresente_subjuntivo (inf, person):
+    return make_present_subjunctive('haber',person) + ' ' + make_past_participle(inf)
 
 
 def make_verb_quiz (infinitives, spanish_func, english_func):

@@ -3,7 +3,7 @@
     <b>Welcome to MR Hinkle's incredibly Low Tech Web Study App</b>
     <ul>
       {% for d in data %}
-      <li><a href="/mc/{{d.id}}/">QUIZ {{d.name}}</a></li>
+      <li>{{d.name}} <a href="/mc/{{d.id}}/">Multiple Choice</a> <a href="/or/{{d.id}}/">Open Response</a></li>
       {% endfor %}
       </ul>
   </body>
