@@ -7,6 +7,7 @@ from django.conf.urls.defaults import *
 urlpatterns = patterns('',
     # Example:
     # (r'^quizlet/', include('quizlet.foo.urls')),
+                       (r'^all/$','quiz.views.show_all'),
                        (r'^profile/$','quiz.views.profile'),
                        (r'^all_stats/$','quiz.views.all_stats'),                       
                        #(r'^logout/$','quiz.views.logout_user'),
@@ -21,7 +22,8 @@ urlpatterns = patterns('',
                        ('mc/answer/','quiz.views.mc_answer'),                       
                        ('quiz/','quiz.views.index'),
                        ('^$','quiz.views.index'),                       
-                       ('init','quiz.quizmaker.init'),
+                       ('^init$','quiz.quizmaker.init'),
+                       ('init_quizzes','quiz.quizmaker.init_quizzes'),                       
                        (r'^openid/', include('django_openid_auth.urls')),
 
     # Uncomment the admin/doc line below and add 'django.contrib.admindocs' 

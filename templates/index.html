@@ -1,10 +1,49 @@
 <html>
   <body>
     <b>Welcome to MR Hinkle's incredibly Low Tech Web Study App</b>
+
+    <h3><b>Quizzes</b></h3>
     <ul>
-      {% for d in data %}
-      <li>{{d.name}} <a href="/mc/{{d.id}}/">Multiple Choice</a> <a href="/or/{{d.id}}/">Open Response</a></li>
-      {% endfor %}
+      {% for quiz in quizzes %}
+      <li><b>{{quiz.object.name}}</b>
+      <ul>
+	{% for category in quiz.branches %}
+	<li>{{category.name}} <a href="/mc/{{category.id}}/">Multiple Choice</a> <a href="/or/{{category.id}}/">Open Response</a></li>
+	{% endfor %}
+
       </ul>
+      </li>
+      {% endfor %}
+    </ul>
+    
+    <h3><b>All Categories</b></h3>
+    <ul>
+      {% for catfam in cat_tree.branches %}
+      <li>{{catfam.object.name}} <a href="/mc/{{catfam.object.id}}/">Multiple Choice</a> <a href="/or/{{catfam.object.id}}/">Open Response</a>
+	<ul>
+	  {% for catfam2 in catfam.branches %}
+          <li>{{catfam2.object.name}} <a href="/mc/{{catfam2.object.id}}/">Multiple Choice</a> <a href="/or/{{catfam2.object.id}}/">Open Response</a>
+	    <ul>
+	      {% for catfam3 in catfam2.branches %}
+              <li>{{catfam3.object.name}} <a href="/mc/{{catfam3.object.id}}/">Multiple Choice</a> <a href="/or/{{catfam3.object.id}}/">Open Response</a>
+
+		<ul>
+		  {% for catfam4 in catfam3.branches %}
+		  <li>{{catfam4.object.name}} <a href="/mc/{{catfam4.object.id}}/">Multiple Choice</a> <a href="/or/{{catfam4.object.id}}/">Open Response</a>
+		  </li>
+		  {% endfor %}
+		  
+		</ul>
+		
+	      </li>
+
+		{% endfor %}
+	    </ul>
+	  </li>
+	  {% endfor %}
+	</ul>
+	{% endfor %}
+      </li>
+    </ul>
   </body>
 </html>

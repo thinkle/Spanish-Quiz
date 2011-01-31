@@ -1,6 +1,15 @@
 {% include "quiz_header.html" %}
-	  <form action="/or/answer/" method="post">
-	    <input type="hidden" name="category" value="{{category}}">
+	  <b>Category: {{category.name}}</b>
+	      {% if reverse %}
+	      <a href="/or/{{category.id}}/">(reverse)</a>
+	      <a href="/mc/{{category.id}}/r">(multiple choice)</a>
+	      {% else %}
+	      <a href="/or/{{category.id}}/r">(reverse)</a>
+	      <a href="/mc/{{category.id}}/r">(multiple choice)</a>
+	      {% endif %}
+
+	  <form name="quiz" id="quiz" action="/or/answer/" method="post">
+	    <input type="hidden" name="category" value="{{category.id}}">
 	    <input type="hidden" name="target" value="{{target.id}}">
 	    <input type="hidden" name="reverse" value="{{reverse}}">
 	    <input type="hidden" name="time" value="{{time}}">	    	    
@@ -19,9 +28,14 @@
 				 >
 	      <table>
 		<tr>
-		  <td><input type="entry" name="answer"></td>
+		  <td><input id="answer" type="entry" name="answer"></td>
 		  <td><input type="submit" value="submit"></td>
 		</tr>
 	      </table>
 	  </form>
+	  <script type="text/javascript">
+	    window.onload = function(){
+	    document.forms['quiz'].elements['answer'].focus();
+	    }
+	  </script>
 {% include "quiz_footer.html" %}

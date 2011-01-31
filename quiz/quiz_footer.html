@@ -9,6 +9,11 @@
 	    </p>
 	    <p style="font-size:smaller">You are logged in as IACS ID {{uoid}}
 	       </p>
+	 {% if reverse %}
+	  <a href="/mc/{{category}}/">Reverse!</a>
+	  {% else %}
+	  <a href="/mc/{{category}}/r">Reverse!</a>
+	  {% endif %}
 	  <a href="/quiz/">Choose another quiz</a>
 	  {% if lastanswer %}
 	  {% if lastanswer.correct %}
@@ -24,29 +29,17 @@
 	  <p>You answered in {{lastanswer.speed|floatformat:1}} seconds</p>
 	  {% endif %}
 	  <div class="stats" style="border:1px solid black">
-	    <p>Record for {{stats.cat.name}}: {{stats.category.overall.ratio}} ({{stats.category.overall.perc}})</p>
-	      <ul>
-		<li><i>multiple choice: {{stats.category.mc.ratio}} {{stats.category.mc.perc}}</i></li>
-		<li><i>open response: {{stats.category.open.ratio}} {{stats.category.open.perc}}</i></li>
-	      </ul>
-	    
-	    {% if stats.last_hour.overall.ratio != stats.overall.overall.ratio %}
-	    <p>Record in last hour is: {{stats.last_hour.overall.ratio}} ({{stats.last_hour.overall.perc}}) {% if stats.last_hour.open.perc %} (open: {{stats.last_hour.open.perc}}) {% endif %}</p>
+	    <p>Record for {{stats.cat.name}}: {{stats.category.ratio}} ({{stats.category.perc}})</p>
+	    {% if stats.last_hour.ratio != stats.overall.ratio %}
+	    <p>Record in last hour is: {{stats.last_hour.ratio}} ({{stats.last_hour.perc}})</p>
 	    {% endif %}
-	    {% if stats.last_day.overall.ratio != stats.overall.overall.ratio and stats.last_day.overall.ratio != stats.last_hour.overall.ratio %}
-	    <p>Record in last day is: {{stats.last_day.overall.ratio}} ({{stats.last_day.overall.perc}})
-
-	      {% if stats.last_day.open.perc %} (open: {{stats.last_day.open.perc}}) {% endif %}
-	    </p>
+	    {% if stats.last_day.ratio != stats.overall.ratio and stats.last_day.ratio != stats.last_hour.ratio %}
+	    <p>Record in last day is: {{stats.last_day.ratio}} ({{stats.last_day.perc}})</p>
 	    {% endif %}
-	    {% if stats.last_week.overall.ratio != stats.overall.overall.ratio and stats.last_week.overall.ratio != stats.last_day.overall.ratio %}	    
-	    <p>Record in last week is: {{stats.last_week.overall.ratio}} ({{stats.last_week.overall.perc}})</p>
+	    {% if stats.last_week.ratio != stats.overall.ratio and stats.last_week.ratio != stats.last_day.ratio %}	    
+	    <p>Record in last week is: {{stats.last_week.ratio}} ({{stats.last_week.perc}})</p>
 	    {% endif %}
-	    <p>All time record: {{stats.overall.overall.ratio}} ({{stats.overall.overall.perc}})
-
-	      {% if stats.overall.open.perc %} (open: {{stats.overall.open.perc}}) {% endif %}
-
-	    </p>
+	    <p>All time record: {{stats.overall.ratio}} ({{stats.overall.perc}})</p>
 	    {% if stats.previous_attempts %}
 	    <p>Your trackrecord on this question is: <span style="fontsize:smaller">
 		{{stats.previous_attempt_history }}

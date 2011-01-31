@@ -1,6 +1,18 @@
 {% include "quiz_header.html" %}
+	  <b>Category: {{category.name}}</b>
+
+	      {% if reverse %}
+	      <a href="/mc/{{category.id}}/">(reverse)</a>
+	      <a href="/or/{{category.id}}/r">(open)</a>
+	      {% else %}
+	      <a href="/mc/{{category.id}}/r">(reverse)</a>
+	      <a href="/or/{{category.id}}/r">(open)</a>
+	      {% endif %}
+	      
+
+	  
 	  <form action="/mc/answer/" method="post">
-	    <input type="hidden" name="category" value="{{category}}">
+	    <input type="hidden" name="category" value="{{category.id}}">
 	    <input type="hidden" name="target" value="{{target.id}}">
 	    <input type="hidden" name="reverse" value="{{reverse}}">
 	    <input type="hidden" name="time" value="{{time}}">	    	    
@@ -10,7 +22,9 @@
 		  {% else %}
 		  {{target.l1}}
 		  {% endif %}
-	      </b></span> <input type="hidden" name="correct_answer"
+	      </b></span>
+	      
+	      <input type="hidden" name="correct_answer"
 				 {% if reverse %}
 				 value="{{target.l1}}"
 				 {% else %}

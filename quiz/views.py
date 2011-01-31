@@ -16,42 +16,6 @@ import models
 CORRECT = 0
 TRIED = 0
 
-vocab_data_set = []
-ifi = file('unordered_first_161_words.txt','r')
-for l in ifi.readlines():
-    words = l.split(':')
-    words = [w.strip() for w in words]
-    vocab_data_set.append(words)
-
-def init (*args):
-    cat = models.Category(name='Spanish II Semester I Vocabulary')
-    cat.save()
-    ifi = file('unordered_first_161_words.txt','r')
-    for l in ifi.readlines():
-        words = l.split(':')
-        words = [w.strip() for w in words]
-        t = models.Triplet(l1=words[1],l2=words[0]); t.save()
-        cl = models.CategoryLink(triplet=t,category=cat)
-        cl.save()
-    import conjugations
-    cat = models.Category(name='Present Tense Regular Verbs')
-    cat.save()
-    reg_verbs = [('hablar','talk'),('comer','eat'),('bailar','dance'),
-                 ('besar','kiss'),('escupir','spit')]
-    for sp,eng in conjugations.make_verb_quiz(reg_verbs,
-                                 conjugations.make_present,
-                                 conjugations.make_eng_present):
-        t = models.Triplet(l1=eng,l2=sp); t.save()
-        cl = models.CategoryLink(triplet=t,category=cat)
-    cat = models.Category(name='Preterit Tense Regular Verbs')
-    cat.save()
-    for sp,eng in conjugations.make_verb_quiz(reg_verbs,
-                                 conjugations.make_preterit,
-                                 conjugations.make_eng_pret):
-        t = models.Triplet(l1=eng,l2=sp); t.save()
-        cl = models.CategoryLink(triplet=t,category=cat)
-    return HttpResponseRedirect('/quiz/')
-    
 # User stuff
 
 class UserForm (ModelForm):
@@ -62,6 +26,10 @@ class UserForm (ModelForm):
 def logout_user (request):
     logout(request)
     return HttpResponseRedirect('/')
+
+def show_all (request):
+    cl = models.CategoryLink.objects.all().order_by("triplet__l2")
+    return render_to_response('all.html',{'links':cl})
 
 @login_required
 def profile (request):
@@ -88,6 +56,29 @@ def propify (f):
             return getattr(self,propname)
     return _
 
+class StatSetSet (object):
+
+    def __init__ (self, attempts):
+        self.attempts = attempts
+
+    @propify 
+    def get_open (self):
+        return StatSet(self.attempts.filter(
+            question_type=models.OPEN_RESPONSE
+            )
+                       )
+
+    @propify
+    def get_mc (self):
+        return StatSet(self.attempts.filter(
+            question_type=models.MULTIPLE_CHOICE
+            )
+                       )
+
+    @propify
+    def get_overall (self):
+        return StatSet(self.attempts)
+
 class StatSet (object):
 
     def __init__ (self, attempts):
@@ -101,6 +92,13 @@ class StatSet (object):
     
     @propify
     def get_num_correct (self): return self.get_correct().count()
+
+    @propify
+    def get_num_correct_open (self): return self.get_correct().count()
+
+    @propify
+    def get_num_correct_mc (self): return self.get_correct().count()
+
     
     @propify
     def average_speed (self):
@@ -124,11 +122,11 @@ class Stats (object):
 
     @propify
     def get_overall (self):
-        return StatSet(models.QuizData.objects.filter(user=self.user))
+        return StatSetSet(models.QuizData.objects.filter(user=self.user))
 
     @propify
     def get_category (self):
-        return StatSet(
+        return StatSetSet(
             self.get_overall().attempts.filter(
                 triplet__categorylink__category=self.cat
                 )
@@ -138,7 +136,7 @@ class Stats (object):
     def get_last_hour (self):
         today = datetime.datetime.utcnow()
         one_hour_ago = today.replace(hour=today.hour - 1)
-        return StatSet(
+        return StatSetSet(
             self.get_overall().attempts.filter(
                 answer_time__gt=one_hour_ago,
                 answer_time__lte=today
@@ -149,7 +147,7 @@ class Stats (object):
     def get_last_day (self):
         today = datetime.datetime.utcnow()
         one_hour_ago = today.replace(day=today.day - 1)
-        return StatSet(
+        return StatSetSet(
             self.get_overall().attempts.filter(
                 answer_time__gt=str(one_hour_ago),
                 answer_time__lte=str(today)
@@ -160,7 +158,7 @@ class Stats (object):
     def get_last_week (self):
         today = datetime.datetime.utcnow()
         one_week_ago = today.replace(day=today.day-7)
-        return StatSet(
+        return StatSetSet(
             self.get_overall().attempts.filter(
                 answer_time__gt=str(one_week_ago),
                 answer_time__lt=str(today),
@@ -221,6 +219,7 @@ def filter_questions (catlinks, user, min_questions = 4):
     catlinks = catlinks.exclude(
         triplet__in=[qd.triplet for qd in to_exclude]
         )
+    catlinks = catlinks.order_by('?')
     return catlinks
 
 def pick_question (catlinks, user):
@@ -244,6 +243,42 @@ def generate_question (cat, user=None, mc=True):
         #if len(my_similar_links) >= 3:
         #    my_links = my_similar_links
         dummylinks = orig_catlinks.exclude(id=q_a.id)
+        dummylinks = orig_catlinks.exclude(triplet__l1=q_a.triplet.l1)
+        dummylinks = orig_catlinks.exclude(triplet__l2=q_a.triplet.l2)        
+        # Find similar...
+        idx = 0
+        seed = random.randint(0,3); start=1; end=2
+        print 'seed=',seed
+        if seed > 0:
+            if seed==start:
+                similarlinks = dummylinks.filter(triplet__l2__startswith=q_a.triplet.l2[0])
+            elif seed==end:
+                similarlinks = dummylinks.filter(triplet__l2__endswith=q_a.triplet.l2[-1:])
+            else:
+                similarlinks = dummylinks.filter(triplet__l2__contains=q_a.triplet.l2[3])
+            while len(similarlinks) > 3:
+                dummylinks = similarlinks
+                idx += 1
+                if idx > 4: break
+                if seed==start:
+                    similarlinks = dummylinks.filter(
+                        triplet__l2__startswith=q_a.triplet.l2[0:idx]
+                        )
+                elif seed==end:
+                    similarlinks = dummylinks.filter(
+                        triplet__l2__endswith=q_a.triplet.l2[-(idx+1):]
+                        )
+                else:
+                    similarlinks = dummylinks.filter(
+                        triplet__l2__contains=q_a.triplet.l2[3:(3+idx)]
+                        )
+            if seed==start:
+                print 'Filtered on ',q_a.triplet.l2[:idx-1],'idx=',idx-1,len(dummylinks)
+            elif seed==end:
+                print 'Filtered on ',q_a.triplet.l2[-idx:],'idx=',idx-1,len(dummylinks)
+            else:
+                print 'Filtered on contains',q_a.triplet.l2[3:(3+idx)],'idx=',idx-1,len(dummylinks)
+        dummylinks = dummylinks.order_by('?')        
         all_answers = [o.triplet for o in dummylinks[0:3]] + [q_a.triplet]
         random.shuffle(all_answers)
         answer_rows = [[all_answers[0],all_answers[1]],[all_answers[2],all_answers[3]]]
@@ -251,11 +286,39 @@ def generate_question (cat, user=None, mc=True):
     else:
         return q_a.triplet
 
+class Node:
+    def __init__ (self, obj):
+        self.object = obj
+        self.branches = []
+
+    def add_branch (self, b):
+        self.branches.append(b)
+
 def index (request):
-    cats = models.Category.objects.all()
+    print 'INDEX!'
+    top_cats = models.Category.objects.filter(parent=None)
+    cat_tree = Node(None)
+    def add_to_tree (category, tree):
+        branch = Node(category)
+        tree.add_branch(branch)
+        for c in models.Category.objects.filter(parent=category):
+            if models.CategoryLink.objects.filter(category=c):
+                add_to_tree(c,branch)
+    for c in top_cats:
+        add_to_tree(c,cat_tree)
+    print 'CAT TREE:',cat_tree
+    qquery = models.QuizGroup.objects.all()
+    quizzes = []
+    for qg in qquery:
+        node = Node(qg)
+        for qgl in models.QuizGroupLink.objects.filter(quizgroup=qg):
+            node.add_branch(qgl.category)
+        quizzes.append(node)
     return render_to_response(
         'index.html',
-        {'data':cats})
+        {'cat_tree':cat_tree,
+         'quizzes':quizzes,
+         })
 
 def mc_r (request, category, reverse=False, rightanswer=None, lastanswer=None):
     return mc(request, category, reverse=True, rightanswer=rightanswer, lastanswer=lastanswer)
@@ -265,8 +328,9 @@ def open_response_r (request, category, reverse=False, rightanswer=None, lastans
 
 def quiz_question (request, category, reverse=False, rightanswer=None, lastanswer=None,
                    question_type=models.MULTIPLE_CHOICE):
-    category = int(category)
-    cat = models.Category.objects.get(id=category)
+    if not isinstance(category,models.Category):
+        category = int(category)
+        category = models.Category.objects.get(id=category)
     try:
         uoid = UserOpenID.objects.get(user=request.user)
     except:
@@ -275,12 +339,16 @@ def quiz_question (request, category, reverse=False, rightanswer=None, lastanswe
         uoid = o()
         uoid.display_id = 'None'
         uoid.claimed_id=None
-    stats = Stats(cat,request.user,lastanswer)
+    stats = Stats(category,request.user,lastanswer)
     stats.fetch_props(
-        #'cat_attempts','num_cat_attempts',
-        'category.ratio','category.perc','overall.ratio','overall.perc',
-        'last_hour.ratio','last_hour.perc','last_day.ratio','last_day.perc',
-        'last_week.ratio','last_week.perc',        
+        #'category_attempts','num_category_attempts',
+        'category.overall.ratio','category.mc.ratio','category.open.ratio',
+        'category.mc.perc','category.open.perc',
+        'category.overall.perc','overall.overall.ratio','overall.overall.perc',
+        'overall.open.perc',
+        'last_hour.overall.ratio','last_hour.overall.perc','last_day.overall.ratio',
+        'last_day.overall.perc','last_hour.open.perc','last_day.open.perc','last_week.open.perc',
+        'last_week.overall.ratio','last_week.overall.perc',       
         'previous_attempts','previous_attempt_history')
     parameters = {
         'stats':stats,
@@ -293,7 +361,7 @@ def quiz_question (request, category, reverse=False, rightanswer=None, lastanswe
         'uoid':uoid.display_id,
         }
     if question_type == models.MULTIPLE_CHOICE:
-        q_a,answer_rows = generate_question(cat,request.user)
+        q_a,answer_rows = generate_question(category,request.user)
         parameters['answer_rows'] = answer_rows
         parameters['target'] = q_a
         return render_to_response(
@@ -301,7 +369,7 @@ def quiz_question (request, category, reverse=False, rightanswer=None, lastanswe
             parameters
          )
     elif question_type == models.OPEN_RESPONSE:
-        q_a = generate_question(cat,request.user,mc=False)
+        q_a = generate_question(category,request.user,mc=False)
         parameters['target'] = q_a
         return render_to_response(
             'open_response.html',
@@ -352,27 +420,48 @@ def answer (request, question_type=models.MULTIPLE_CHOICE):
     atime = float(atime)
     current_time = time.time()
     speed = current_time - atime
+    triplet=models.Triplet.objects.get(id=target)
     if reverse=='False': reverse = False
     else: reverse = True
     if question_type == models.OPEN_RESPONSE:
-        answer = fix_accents(answer).lower()
         correct_answer = correct_answer.lower()
+        correct_answer = re.sub('\s-*\([^)]*\)','',correct_answer)
+        answer = re.sub('\s-*\([^)]*\)','',answer)
+        answer = re.sub('(he|she|it) ','he/she/it ',answer)
+        answer = re.sub('you all','you guys',answer)
+        answer = re.sub("y'all",'you guys',answer)                
+        answer = fix_accents(answer)
+        print 'Answer changed to: ',answer
+        if answer != correct_answer:
+            # Check if there's another answer out there...
+            try:
+                if triplet.l1 == correct_answer:
+                    alternative = models.Triplet.objects.get(l1=answer,l2=triplet.l2)
+                else:
+                    alternative = models.Triplet.objects.get(l1=triplet.l1,l2=answer)
+            except:
+                pass
+            else:
+                print 'Alternative answer!',triplet.l1,triplet.l2,'=>',
+                triplet = alternative
+                print triplet.l1,triplet.l2
+                correct_answer = answer
     try:
         qd = models.QuizData(
             user=request.user,
-            triplet=models.Triplet.objects.get(id=target),
+            triplet=triplet,
             reverse=reverse,
             question_type=question_type,
-            correct=(answer==correct_answer),
+            correct=(answer.lower()==correct_answer.lower()),
             speed=speed,
             answer_time=datetime.datetime.today(),
             )
     except:
         qd = models.QuizData(
-            triplet=models.Triplet.objects.get(id=target),
+            triplet=triplet,
             reverse=reverse,
             question_type=question_type,
-            correct=(answer==correct_answer),
+            correct=(answer.lower()==correct_answer.lower()),
             speed=speed,
             answer_time=datetime.datetime.today(),
             )
