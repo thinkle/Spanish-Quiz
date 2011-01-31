@@ -6,19 +6,35 @@
 	{{stat.user.first_name}} {{stat.user.last_name}} {{stat.user.email}}
       </td>
       <td>
-	<p>Category {{stat.cat.name}}: {{stat.category.ratio}} ({{stat.category.overall.perc}})</p>
+	<p>Category {{stat.cat.name}}: {{stat.category.overall.ratio}} ({{stat.category.overall.perc}})
+	  (Open: {{stat.category.open.ratio}})
+	</p>
 	{% if stat.last_hour.overall.ratio != stat.overall.overall.ratio %}
-	<p>Record in last hour is: {{stat.last_hour.overall.ratio}} ({{stat.last_hour.overall.perc}})</p>
+	<p>Record in last hour is: {{stat.last_hour.overall.ratio}} ({{stat.last_hour.overall.perc}})
+	  (Open: {{stat.last_hour.open.ratio}})
+	</p>
 	{% endif %}
 	{% if stat.last_day.overall.ratio != stat.overall.overall.ratio and stat.last_day.overall.ratio != stat.last_hour.overall.ratio %}
-	<p>Record in last day is: {{stat.last_day.overall.ratio}} ({{stat.last_day.overall.perc}})</p>
+	<p>Record in last day is: {{stat.last_day.overall.ratio}} ({{stat.last_day.overall.perc}})
+	  (Open: {{stat.last_day.open.ratio}})
+	</p>
 	{% endif %}
 	{% if stat.last_week.overall.ratio != stat.overall.overall.ratio and stat.last_week.overall.ratio != stat.last_day.overall.ratio %}	    
-	    <p>Record in last week is: {{stat.last_week.overall.ratio}} ({{stat.last_week.overall.perc}})</p>
+	    <p>Record in last week is: {{stat.last_week.overall.ratio}} ({{stat.last_week.overall.perc}})
+
+	  (Open: {{stat.last_week.open.ratio}})
+	    </p>
 	    {% endif %}
-	    <p>All time record: {{stat.overall.overall.ratio}} ({{stat.overall.overall.perc}})</p>
+	    <p>All time record: {{stat.overall.overall.ratio}} ({{stat.overall.overall.perc}})
+	      (Open: {{stat.overall.open.ratio}})
+	    </p>
       </td>
     </tr>
     {% endfor %}
   </table>
+  <span style="font-size:smaller">
+    {% for c in categories %}
+    <a href="./{{c.id}}">{{c.name}}</a>
+    {% endfor %}
+  </span>
 </html>

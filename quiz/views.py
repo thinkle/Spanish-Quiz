@@ -390,6 +390,9 @@ def mc (request, category, reverse=False, rightanswer=None, lastanswer=None):
 
 def all_stats (request, category=None):
     stats = []
+    print 'Category=',category
+    if not isinstance(category,models.Category):
+        category = models.Category.objects.get(id=int(category))
     for user in User.objects.all():
         print user,user.first_name
         if not category:
@@ -406,7 +409,9 @@ def all_stats (request, category=None):
             'category.overall.ratio','category.open.ratio','category.overall.perc','category.open.perc'
             )
         stats.append(s)
-    return render_to_response('stats.html',{'stats':stats})
+    return render_to_response('stats.html',{'stats':stats,
+                                            'categories':models.Category.objects.all(),
+                                            })
 
 def answer (request, question_type=models.MULTIPLE_CHOICE):
     global TRIED,CORRECT
