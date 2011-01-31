@@ -399,14 +399,13 @@ def all_stats (request, category=None):
                 category = models.Category.objects.all()[0]
         s = Stats(category,user)
         s.fetch_props(
-            'last_day.ratio','last_day.perc',
-            'last_hour.ratio','last_hour.perc',
-            'last_week.ratio','last_week.perc',            
-            'overall.ratio','overall.perc',
-            'category.ratio','category.perc'
+            'last_day.overall.ratio','last_day.open.ratio','last_day.overall.perc','last_day.open.perc',
+            'last_hour.overall.ratio','last_hour.open.ratio','last_hour.overall.perc','last_hour.open.perc',
+            'last_week.overall.ratio','last_week.open.ratio','last_week.overall.perc','last_week.open.perc',            
+            'overall.overall.ratio','overall.open.ratio','overall.overall.perc','overall.open.perc',
+            'category.overall.ratio','category.open.ratio','category.overall.perc','category.open.perc'
             )
         stats.append(s)
-    print 'stats=',stats
     return render_to_response('stats.html',{'stats':stats})
 
 def answer (request, question_type=models.MULTIPLE_CHOICE):
