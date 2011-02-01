@@ -439,7 +439,7 @@ def answer (request, question_type=models.MULTIPLE_CHOICE):
             answer = fix_accents(answer)
         except UnicodeError:
             #print 'Unicode Schmoonicode'
-            import traceback; traceback.#print_exc()
+            import traceback; traceback.print_exc()
             #print 'ignore away!'
         #print 'Answer changed to: ',answer
         if answer != correct_answer:
