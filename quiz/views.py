@@ -248,7 +248,7 @@ def generate_question (cat, user=None, mc=True):
         # Find similar...
         idx = 0
         seed = random.randint(0,3); start=1; end=2
-        print 'seed=',seed
+        #print 'seed=',seed
         if seed > 0:
             if seed==start:
                 similarlinks = dummylinks.filter(triplet__l2__startswith=q_a.triplet.l2[0])
@@ -273,11 +273,11 @@ def generate_question (cat, user=None, mc=True):
                         triplet__l2__contains=q_a.triplet.l2[3:(3+idx)]
                         )
             if seed==start:
-                print 'Filtered on ',q_a.triplet.l2[:idx-1],'idx=',idx-1,len(dummylinks)
+                #print 'Filtered on ',q_a.triplet.l2[:idx-1],'idx=',idx-1,len(dummylinks)
             elif seed==end:
-                print 'Filtered on ',q_a.triplet.l2[-idx:],'idx=',idx-1,len(dummylinks)
+                #print 'Filtered on ',q_a.triplet.l2[-idx:],'idx=',idx-1,len(dummylinks)
             else:
-                print 'Filtered on contains',q_a.triplet.l2[3:(3+idx)],'idx=',idx-1,len(dummylinks)
+                #print 'Filtered on contains',q_a.triplet.l2[3:(3+idx)],'idx=',idx-1,len(dummylinks)
         dummylinks = dummylinks.order_by('?')        
         all_answers = [o.triplet for o in dummylinks[0:3]] + [q_a.triplet]
         random.shuffle(all_answers)
@@ -295,7 +295,7 @@ class Node:
         self.branches.append(b)
 
 def index (request):
-    print 'INDEX!'
+    #print 'INDEX!'
     top_cats = models.Category.objects.filter(parent=None)
     cat_tree = Node(None)
     def add_to_tree (category, tree):
@@ -306,7 +306,7 @@ def index (request):
                 add_to_tree(c,branch)
     for c in top_cats:
         add_to_tree(c,cat_tree)
-    print 'CAT TREE:',cat_tree
+    #print 'CAT TREE:',cat_tree
     qquery = models.QuizGroup.objects.all()
     quizzes = []
     for qg in qquery:
@@ -391,11 +391,11 @@ def mc (request, category, reverse=False, rightanswer=None, lastanswer=None):
 
 def all_stats (request, category=None):
     stats = []
-    print 'Category=',category
+    #print 'Category=',category
     if not isinstance(category,models.Category):
         category = models.Category.objects.get(id=int(category))
     for user in User.objects.all():
-        print user,user.first_name
+        #print user,user.first_name
         if not category:
             try:
                 category = models.QuizData.objects.filter(user=user)[0].triplet.category
@@ -438,10 +438,10 @@ def answer (request, question_type=models.MULTIPLE_CHOICE):
             answer = re.sub(u"y'all",'you guys',answer)                
             answer = fix_accents(answer)
         except UnicodeError:
-            print 'Unicode Schmoonicode'
-            import traceback; traceback.print_exc()
-            print 'ignore away!'
-        print 'Answer changed to: ',answer
+            #print 'Unicode Schmoonicode'
+            import traceback; traceback.#print_exc()
+            #print 'ignore away!'
+        #print 'Answer changed to: ',answer
         if answer != correct_answer:
             # Check if there's another answer out there...
             try:
@@ -452,9 +452,9 @@ def answer (request, question_type=models.MULTIPLE_CHOICE):
             except:
                 pass
             else:
-                print 'Alternative answer!',triplet.l1,triplet.l2,'=>',
+                #print 'Alternative answer!',triplet.l1,triplet.l2,'=>',
                 triplet = alternative
-                print triplet.l1,triplet.l2
+                #print triplet.l1,triplet.l2
                 correct_answer = answer
     try:
         qd = models.QuizData(
