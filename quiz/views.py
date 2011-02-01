@@ -135,7 +135,7 @@ class Stats (object):
     @propify
     def get_last_hour (self):
         today = datetime.datetime.utcnow()
-        one_hour_ago = today - datetime.timedelta(hour=1)
+        one_hour_ago = today - datetime.timedelta(hours=1)
         return StatSetSet(
             self.get_overall().attempts.filter(
                 answer_time__gt=one_hour_ago,
@@ -146,7 +146,7 @@ class Stats (object):
     @propify
     def get_last_day (self):
         today = datetime.datetime.utcnow()
-        one_day_ago = today - datetime.timedelta(day=1)
+        one_day_ago = today - datetime.timedelta(days=1)
         return StatSetSet(
             self.get_overall().attempts.filter(
                 answer_time__gt=str(one_day_ago),
@@ -157,7 +157,7 @@ class Stats (object):
     @propify
     def get_last_week (self):
         today = datetime.datetime.utcnow()
-        one_week_ago = today - datetime.timedelta(day=7)
+        one_week_ago = today - datetime.timedelta(days=7)
         return StatSetSet(
             self.get_overall().attempts.filter(
                 answer_time__gt=str(one_week_ago),
