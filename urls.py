@@ -23,8 +23,10 @@ urlpatterns = patterns('',
                        ('mc/answer/','quiz.views.mc_answer'),                       
                        ('quiz/','quiz.views.index'),
                        ('^$','quiz.views.index'),                       
-                       ('^init$','quiz.quizmaker.init'),
-                       ('init_quizzes','quiz.quizmaker.init_quizzes'),                       
+                       #('^init$','quiz.quizmaker.init'),
+                       ('init_newest','quiz.quizmaker.newest_categories'),
+                       ('init_quizzes','quiz.quizmaker.init_quizzes'),
+                       ('init_quizzes','quiz.quizmaker.init_quizzes'),
                        (r'^openid/', include('django_openid_auth.urls')),
 
     # Uncomment the admin/doc line below and add 'django.contrib.admindocs' 
