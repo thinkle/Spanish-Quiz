@@ -148,7 +148,7 @@ preterit_irregular = {
     }
 
 preterit_irregular_stems = {
-    u'decir':u'dic',
+    u'decir':u'dij',
     u'estar':u'estuv',
     u'haber':u'hub',
     u'hacer':u'hic',
