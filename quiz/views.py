@@ -255,7 +255,10 @@ def generate_question (cat, user=None, mc=True):
             elif seed==end:
                 similarlinks = dummylinks.filter(triplet__l2__endswith=q_a.triplet.l2[-1:])
             else:
-                similarlinks = dummylinks.filter(triplet__l2__contains=q_a.triplet.l2[3])
+                if len(q_a.triplet.l2) > 3:
+                    similarlinks = dummylinks.filter(triplet__l2__contains=q_a.triplet.l2[3])
+                else:
+                    similarlinks = dummylinks.filter(triplet__l2__startswith=q_a.triplet.l2[0])
             while len(similarlinks) > 3:
                 dummylinks = similarlinks
                 idx += 1
