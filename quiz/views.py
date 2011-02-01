@@ -378,6 +378,7 @@ def quiz_question (request, category, reverse=False, rightanswer=None, lastanswe
     else:
         raise error("Unknown question type")
 
+@login_required
 def open_response (request, category, reverse=False, rightanswer=None, lastanswer=None):
     return quiz_question(request, category, reverse=reverse, rightanswer=rightanswer, lastanswer=lastanswer,
                          question_type=models.OPEN_RESPONSE)
@@ -492,7 +493,7 @@ def fix_accents (s):
                    (u"'i",u'í'),
                    (u"'o",u'ó'),
                    (u"'u",u'ú'),
-                   (u'"u',u'ü'),
+                   ('"u',u'ü'),
                    ]:
         s = s.replace(c1,c2)
     return s
