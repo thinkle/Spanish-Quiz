@@ -11,7 +11,7 @@ if socket.gethostname() == 'pebble':
         # Don't forget to use absolute paths, not relative paths.
         '/home/tom/Projects/quizlet/templates/'
         )
-    
+    DATABASE_NAME = 'foo.db'             # Or path to database file if using sqlite3.    
 elif socket.gethostname() == 'grenville':
     print 'My Desktop'
     DEBUG = True
@@ -21,7 +21,8 @@ elif socket.gethostname() == 'grenville':
         # Always use forward slashes, even on Windows.
         # Don't forget to use absolute paths, not relative paths.
         '/home/tom/Projects/quizlet/templates/'
-        )    
+        )
+    DATABASE_NAME = 'foo.db'             # Or path to database file if using sqlite3.    
 else:
     print 'Not my laptop'
     DEBUG = TEMPLATE_DEBUG =  False
@@ -31,7 +32,7 @@ else:
         # Don't forget to use absolute paths, not relative paths.
         '/home/thinkle/quizlet/templates/'
         )    
-    
+    DATABASE_NAME = '/home/thinkle/quizlet/data/db.db'             # Or path to database file if using sqlite3.    
 
 ADMINS = (
     # ('Your Name', 'your_email@domain.com'),
@@ -40,7 +41,7 @@ ADMINS = (
 MANAGERS = ADMINS
 
 DATABASE_ENGINE = 'sqlite3'           # 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-DATABASE_NAME = 'foo.db'             # Or path to database file if using sqlite3.
+
 DATABASE_USER = ''             # Not used with sqlite3.
 DATABASE_PASSWORD = ''         # Not used with sqlite3.
 DATABASE_HOST = ''             # Set to empty string for localhost. Not used with sqlite3.

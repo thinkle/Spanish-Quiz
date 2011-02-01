@@ -429,11 +429,11 @@ def answer (request, question_type=models.MULTIPLE_CHOICE):
     else: reverse = True
     if question_type == models.OPEN_RESPONSE:
         correct_answer = correct_answer.lower()
-        correct_answer = re.sub('\s-*\([^)]*\)','',correct_answer)
-        answer = re.sub('\s-*\([^)]*\)','',answer)
-        answer = re.sub('(he|she|it) ','he/she/it ',answer)
-        answer = re.sub('you all','you guys',answer)
-        answer = re.sub("y'all",'you guys',answer)                
+        correct_answer = re.sub(u'\s-*\([^)]*\)','',correct_answer)
+        answer = re.sub(u'\s-*\([^)]*\)','',answer)
+        answer = re.sub(u'(he|she|it) ','he/she/it ',answer)
+        answer = re.sub(u'you all','you guys',answer)
+        answer = re.sub(u"y'all",'you guys',answer)                
         answer = fix_accents(answer)
         print 'Answer changed to: ',answer
         if answer != correct_answer:
@@ -486,13 +486,13 @@ def answer (request, question_type=models.MULTIPLE_CHOICE):
                   lastanswer=qd)
 
 def fix_accents (s):
-    for c1,c2 in [('~n',u'ñ'),
-                   ("'e",u'é'),
-                   ("'a",u'á'),
-                   ("'i",u'í'),
-                   ("'o",u'ó'),
-                   ("'u",u'ú'),
-                   ('"u',u'ü'),
+    for c1,c2 in [(u'~n',u'ñ'),
+                   (u"'e",u'é'),
+                   (u"'a",u'á'),
+                   (u"'i",u'í'),
+                   (u"'o",u'ó'),
+                   (u"'u",u'ú'),
+                   (u'"u',u'ü'),
                    ]:
         s = s.replace(c1,c2)
     return s
