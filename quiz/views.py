@@ -272,12 +272,12 @@ def generate_question (cat, user=None, mc=True):
                     similarlinks = dummylinks.filter(
                         triplet__l2__contains=q_a.triplet.l2[3:(3+idx)]
                         )
-            if seed==start:
-                #print 'Filtered on ',q_a.triplet.l2[:idx-1],'idx=',idx-1,len(dummylinks)
-            elif seed==end:
-                #print 'Filtered on ',q_a.triplet.l2[-idx:],'idx=',idx-1,len(dummylinks)
-            else:
-                #print 'Filtered on contains',q_a.triplet.l2[3:(3+idx)],'idx=',idx-1,len(dummylinks)
+            #if seed==start:
+            #    #print 'Filtered on ',q_a.triplet.l2[:idx-1],'idx=',idx-1,len(dummylinks)
+            #elif seed==end:
+            #    #print 'Filtered on ',q_a.triplet.l2[-idx:],'idx=',idx-1,len(dummylinks)
+            #else:
+            #    #print 'Filtered on contains',q_a.triplet.l2[3:(3+idx)],'idx=',idx-1,len(dummylinks)
         dummylinks = dummylinks.order_by('?')        
         all_answers = [o.triplet for o in dummylinks[0:3]] + [q_a.triplet]
         random.shuffle(all_answers)
