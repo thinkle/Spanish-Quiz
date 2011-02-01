@@ -193,7 +193,6 @@ def verb_forms ():
         conjugations.make_antepasado_subjuntivo,conjugations.make_eng_pluperfect_subj,
         cdic[u'Subjunctive Antepasado']
         )
-    
 
 def make_quiz (name, categories, description=None):
     qg = select_or_create(models.QuizGroup, name=name)
@@ -233,7 +232,25 @@ def init (*args):
     init_quizzes()
     return HttpResponseRedirect(u'/quiz/')
 
+def newest_categories (*args):
+    smII = select_or_create(models.Category,
+                           name=u'Spanish II Semester II Vocabulary'); smII.save()
+    cat = models.Category(name=u'Lengua de las mariposas - I',parent=smII)
+    cat.save()
+    ifi = file(u'lengua1.txt',u'r')
+    for l in ifi.readlines():
+        words = l.split(':')
+        words = [w.strip() for w in words]
+        t = select_or_create(models.Triplet,l1=words[1],l2=words[0]); t.save()
+        cl = models.CategoryLink(triplet=t,category=cat); cl.save()
+        cl = models.CategoryLink(triplet=t,category=smII); cl.save()        
+    
 def init_quizzes (*args):
+    make_quiz(u'Spanish II - Semester II',
+              [models.Category.objects.get(name=u'Antepresente'),
+               models.Category.objects.get(name=u'Lengua de las mariposas - I'),
+               ]
+              )
     make_quiz(u'Spanish II - Semester I Review',
               [models.Category.objects.get(name=u'Spanish II Semester I Vocabulary'),
                models.Category.objects.get(name=u'Preterit Tense Verbs'),
@@ -244,4 +261,3 @@ def init_quizzes (*args):
               [models.Category.objects.get(name=u'Past Subjunctive Verbs'),
                models.Category.objects.get(name=u'Conditional Verbs')
                ])
-

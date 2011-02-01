@@ -1,0 +1,30 @@
+pegar:hit,strike
+mear:pee (rude)
+cobrar:charge,bill
+cobrar:get "it" (in trouble)
+reírse:laugh
+me río:I laugh
+te ríes:You laugh
+se ríe:He laughs
+nos reímos:We laugh
+se ríen:They laugh
+rencor:bitterness,anger
+maestro:teacher
+estricto:strict
+gorrión:sparrow
+nido:nest
+naturaleza:nature
+pájaro:bird
+mariposa:butterfly
+hormiga:ant
+araña:spider
+salir:leave,exit
+salgo:I exit
+sacar:take out
+sacar:get (as in a grade or information)
+oir:hear
+flor:flower
+novia:girlfriend
+chico:boy
+chica:girl
+maestro:teacher
