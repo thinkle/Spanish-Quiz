@@ -430,7 +430,7 @@ def answer (request, question_type=models.MULTIPLE_CHOICE):
     else: reverse = True
     if question_type == models.OPEN_RESPONSE:
         correct_answer = correct_answer.lower()
-        correct_answer = re.sub(u'\s-*\([^)]*\)','',correct_answer)
+        correct_answer = re.sub(u'\s-*\([^)]*\)\s-*','',correct_answer)
         answer = re.sub(u'\s-*\([^)]*\)','',answer)
         answer = re.sub(u'(he|she|it) ','he/she/it ',answer)
         answer = re.sub(u'you all','you guys',answer)
