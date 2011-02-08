@@ -232,10 +232,10 @@ def init (*args):
     init_quizzes()
     return HttpResponseRedirect(u'/quiz/')
 
-def newest_categories (*args):
+def second_newest_categories (*args):
     smII = select_or_create(models.Category,
                            name=u'Spanish II Semester II Vocabulary'); smII.save()
-    cat = models.Category(name=u'Lengua de las mariposas - I',parent=smII)
+    cat = select_or_create(models.Category,name=u'Lengua de las mariposas - I',parent=smII)
     cat.save()
     ifi = file(u'lengua1.txt',u'r')
     for l in ifi.readlines():
@@ -243,7 +243,22 @@ def newest_categories (*args):
         words = [w.strip() for w in words]
         t = select_or_create(models.Triplet,l1=words[1],l2=words[0]); t.save()
         cl = models.CategoryLink(triplet=t,category=cat); cl.save()
-        cl = models.CategoryLink(triplet=t,category=smII); cl.save()        
+        cl = models.CategoryLink(triplet=t,category=smII); cl.save()
+
+def newest_cxategories (*args):
+    cat1 = select_or_create(models.Category,name=u'Spanish 4 Semester II Vocab'); cat.save()
+    cat2 = select_or_create(models.Category,name=u'Immigration Vocab - Ramos - 1',parent=cat1); cat.save()
+    qg = select_or_create(models.QuizGroup,name=u'Spanish IV')
+    qgl = select_or_create(models.QuizGroupLink,category=cat1,quizgroup=qg); qgl.save()
+    qgl = select_or_create(models.QuizGroupLink,category=cat2,quizgroup=qg); qgl.save()
+    ifi = file(u'lengua1.txt',u'r')
+    for l in ifi.readlines():
+        words = l.split(':')
+        words = [w.strip() for w in words]
+        t = select_or_create(models.Triplet,l1=words[1],l2=words[0]); t.save()
+        cl = models.CategoryLink(triplet=t,categoryf=cat2); cl.save()
+        cl = models.CategoryLink(triplet=t,category=smII); cl.save()
+    
     
 def init_quizzes (*args):
     make_quiz(u'Spanish II - Semester II',

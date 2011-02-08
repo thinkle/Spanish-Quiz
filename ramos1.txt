@@ -1,0 +1,18 @@
+constar: consist
+desarrollar: develop
+desarrollamiento: development
+nivel: level
+cifra: figure, statistic
+demostrar (o->ue): demonstrate
+aportar: contribute, bring
+aportación: contribution, investment
+enfatizar: emphasize
+oferta: supply (n)
+demanda: demand (n)
+ingreso: income
+gasto: expense
+sueldo: salary
+crecer: grow
+disminuir: shrink
+
+
