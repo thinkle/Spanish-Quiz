@@ -50,12 +50,12 @@ def new_triplets (request):
                 else:
                     words = l.split(':')
                     if len(words)==3:
-                        l1=words[2]
-                        desc=words[1]
-                        l2=words[0]
+                        l1=words[2].strip()
+                        desc=words[1].strip()
+                        l2=words[0].strip()
                     else:
-                        l1=words[1]
-                        l2=words[0]
+                        l1=words[1].strip()
+                        l2=words[0].strip()
                         desc=''
                 t = select_or_create(models.Triplet,l1=l1,l2=l2,notes=desc); t.save()
                 cl = select_or_create(models.CategoryLink,triplet=t,category=tf.cleaned_data['category']); cl.save()
