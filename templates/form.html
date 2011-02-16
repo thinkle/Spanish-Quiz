@@ -1,0 +1,17 @@
+<html>
+  <h2>Edit {{title}}</h2>
+  <p>{{desc}}</p>
+<p>
+  <form enctype="multipart/form-data" action="{{action}}" method="POST">
+
+    <table>
+      {{errors}}
+      {{form.as_table}}
+
+
+    <tr><td/><td align="right"><input type="submit" value="Save" id="submit"/>    </td></tr>
+    </table>
+
+  </form>
+</p>
+</html>
