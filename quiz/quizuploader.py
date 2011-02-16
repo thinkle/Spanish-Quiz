@@ -9,20 +9,24 @@ class CategoryForm (ModelForm):
     class Meta:
         model = models.Category
 
-def new_category (request):
+def new_category (request,errors=None):
     if request.method == 'POST':
         instance = models.Category()
         mf = CategoryForm(request.POST,instance=instance)
         if mf.is_valid():
             mf.save()
+            print 'SAVE!'
         else:
-            return HttpResponseRedirect('/new/category/')
+            print 'ERROR!'
+            request.method = None
+            return new_category(request,errors=mf.errors)
         return HttpResponseRedirect('/')
     else:
         mf = CategoryForm()
         return render_to_response('form.html',
                                   {'title':'Category',
                                    'form':mf,
+                                   'errors':errors,
                                    'desc':'Create new category',
                                    'action':'/new/category/'}
                                   )
@@ -45,6 +49,10 @@ def new_triplets (request):
             print request.FILES['csv_file']
             ignored = []
             for l in tf.cleaned_data['csv_file'].readlines():
+                try:
+                    l = l.decode('utf-8')
+                except:
+                    l = l.decode('iso8859_15')
                 if not ':' in l:
                     ignored.append(l)
                 else:
