@@ -28,6 +28,8 @@ urlpatterns = patterns('',
                        ('init_quizzes','quiz.quizmaker.init_quizzes'),
                        ('init_quizzes','quiz.quizmaker.init_quizzes'),
                        (r'^openid/', include('django_openid_auth.urls')),
+                       (r'^new/category/$','quiz.quizuploader.new_category'),
+                       (r'^new/triplets/$','quiz.quizuploader.new_triplets'),                       
 
     # Uncomment the admin/doc line below and add 'django.contrib.admindocs' 
     # to INSTALLED_APPS to enable admin documentation:

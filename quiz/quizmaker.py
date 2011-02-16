@@ -245,7 +245,8 @@ def second_newest_categories (*args):
         cl = models.CategoryLink(triplet=t,category=cat); cl.save()
         cl = models.CategoryLink(triplet=t,category=smII); cl.save()
 
-def newest_cxategories (*args):
+def newest_categories (*args):
+    return
     cat1 = select_or_create(models.Category,name=u'Spanish 4 Semester II Vocab'); cat.save()
     cat2 = select_or_create(models.Category,name=u'Immigration Vocab - Ramos - 1',parent=cat1); cat.save()
     qg = select_or_create(models.QuizGroup,name=u'Spanish IV')

@@ -8,6 +8,10 @@ class Triplet (models.Model):
     l2 = models.CharField(max_length=250)
     notes = models.TextField()
 
+    def __unicode__ (self):
+        return u'%s:%s'%(self.l1.strip(),self.l2.strip())
+    
+
 class Category (models.Model):
     name = models.CharField(max_length=150)
     description = models.TextField()
@@ -16,11 +20,11 @@ class Category (models.Model):
     def children (self):
         return Category.objects.filter(parent=self)
 
-    def __repr__ (self):
+    def __unicode__ (self):
+        prefix = ''
         if self.parent:
-            return '<Category %s:%s >'%(self.parent.name,self.name)
-        else:
-            return '<Category %s >'%self.name
+            prefix = prefix + '%s>'%self.parent
+        return u'%s%s'%(prefix,self.name)
         
 class CategoryLink (models.Model):
     triplet = models.ForeignKey(Triplet)
