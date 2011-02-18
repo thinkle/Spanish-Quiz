@@ -261,25 +261,29 @@ def make_do_ido (*args):
     present_ido = select_or_create(models.Category,name='Present Tense Verbs w/ Indirect Objects',parent=models.Category.objects.get(name='Present Tense Verbs')); present_ido.save()
     add_pairs_to_cats(conjugations.make_ido_quiz(),[present_ido])
     # Past...
-    preterit_do = select_or_create(models.Category,name='Preterit Tense Verbs w/ Direct Objects',parent=models.Category.objects.get(name='Preterit Tense Verbs')); preterit_do.save()
-    add_pairs_to_cats(conjugations.make_do_quiz(verb_maker=(conjugations.make_preterit,conjugations.make_eng_pret)),[preterit_do])
     preterit_ido = select_or_create(models.Category,name='Preterit Tense Verbs w/ Indirect Objects',parent=models.Category.objects.get(name='Preterit Tense Verbs')); preterit_ido.save()
     add_pairs_to_cats(conjugations.make_ido_quiz(verb_maker=(conjugations.make_preterit,conjugations.make_eng_pret)),[preterit_ido])
-
     conditional_do = select_or_create(models.Category,name='Conditional Verbs w/ Direct Objects',parent=models.Category.objects.get(name='Conditional Verbs')); conditional_do.save()
     add_pairs_to_cats(conjugations.make_do_quiz(verb_maker=(conjugations.make_conditional,conjugations.make_eng_cond)),[conditional_do])
     conditional_ido = select_or_create(models.Category,name='Conditional Verbs w/ Indirect Objects',parent=models.Category.objects.get(name='Conditional Verbs')); conditional_ido.save()
     add_pairs_to_cats(conjugations.make_ido_quiz(verb_maker=(conjugations.make_conditional,conjugations.make_eng_cond)),[conditional_ido])
-
+    
+def make_subj_do_ido ():
+    # Fix past
+    preterit_do = select_or_create(models.Category,name='Preterit Tense Verbs w/ Direct Objects',parent=models.Category.objects.get(name='Preterit Tense Verbs')); preterit_do.save()
+    models.CategoryLink.filter(category=preterit_do).delete() # Clear out screwed up preterit...    
+    add_pairs_to_cats(conjugations.make_do_quiz(verb_maker=(conjugations.make_preterit,conjugations.make_eng_pret)),[preterit_do])
     psub_do = select_or_create(models.Category,name='Past Subjunctive Verbs w/ Direct Objects',parent=models.Category.objects.get(name='Subjunctive')); psub_do.save()
-    add_pairs_to_cats(conjugations.make_do_quiz(verb_maker=(conjugations.make_past_subjunctive,conjugations.make_eng_past_subj)),[preterit_do])
+    add_pairs_to_cats(conjugations.make_do_quiz(verb_maker=(conjugations.make_past_subjunctive,conjugations.make_eng_past_subj)),[psub_do])
     psub_ido = select_or_create(models.Category,name='Past Subjunctive Verbs w/ Indirect Objects',parent=models.Category.objects.get(name='Subjunctive')); psub_ido.save()
-    add_pairs_to_cats(conjugations.make_ido_quiz(verb_maker=(conjugations.make_past_subjunctive,conjugations.make_eng_past_subj)),[preterit_ido])
+    add_pairs_to_cats(conjugations.make_ido_quiz(verb_maker=(conjugations.make_past_subjunctive,conjugations.make_eng_past_subj)),[psub_ido])
     make_quiz(u'Spanish IV',
-              [models.Category.objects.get(name=u'Past Subjunctive Verbs w/ Indirect Objects')]
+              [models.Category.objects.get(name=u'Past Subjunctive Verbs w/ Indirect Objects'),
+               models.Category.objects.get(name=u'Past Subjunctive Verbs w/ Direct Objects')
+               models.Category.objects.get(name=u'Conditional Verbs w/ Direct Objects')
+               models.Category.objects.get(name=u'Conditional Verbs w/ Indirect Objects')                              
+               ]
               )
-    
-    
 
 def second_newest_categories (*args):
     smII = select_or_create(models.Category,
@@ -307,7 +311,7 @@ def newest_categories (*args):
     #    t = select_or_create(models.Triplet,l1=words[1],l2=words[0]); t.save()
     #    cl = models.CategoryLink(triplet=t,category=cat2); cl.save()
     #    cl = models.CategoryLink(triplet=t,category=cat1); cl.save()
-    make_do_ido()
+    make_subj_do_ido()
     return HttpResponseRedirect('/')
     
     
