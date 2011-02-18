@@ -276,7 +276,7 @@ def make_do_ido (*args):
     psub_ido = select_or_create(models.Category,name='Past Subjunctive Verbs w/ Indirect Objects',parent=models.Category.objects.get(name='Subjunctive')); psub_ido.save()
     add_pairs_to_cats(conjugations.make_ido_quiz(verb_maker=(conjugations.make_past_subjunctive,conjugations.make_eng_past_subj)),[preterit_ido])
     make_quiz(u'Spanish IV',
-              [models.Category.objects.get(name=u'Past Subjunctive Verbs w/ Indirect Object')]
+              [models.Category.objects.get(name=u'Past Subjunctive Verbs w/ Indirect Objects')]
               )
     
     
