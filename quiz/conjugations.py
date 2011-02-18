@@ -266,7 +266,6 @@ def make_form_from_stem (infinitive, ending):
     elif infinitive.endswith(u'car') and ending[0] in SOFT_VOWELS:
         return infinitive[:-3]+u'qu'+ending
     elif infinitive.endswith(u'gar') and ending[0] in SOFT_VOWELS:
-        print ending[0],u'is a soft vowel',ending
         return infinitive[:-3]+u'gu'+ending
     else:
         return infinitive[:-2]+ending
