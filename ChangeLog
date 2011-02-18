@@ -1,3 +1,11 @@
+2011-02-18  Tom  <tom@localhost6.localdomain6>
+
+	* quiz/conjugations.py (eng_irregular_pp, make_ido_quiz): Add DO/IDO stuff
+
+	* quiz/quizmaker.py (make_do_ido): Add DO/IDO quizzes
+
+	* quiz/views.py (generate_question): Fix duplicates
+
 2011-01-28  Thomas Mills Hinkle  <tom@pebble>
 
 	* templates/stats.html: Add all_stats template.

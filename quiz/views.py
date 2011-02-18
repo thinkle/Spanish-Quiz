@@ -243,8 +243,8 @@ def generate_question (cat, user=None, mc=True):
         #if len(my_similar_links) >= 3:
         #    my_links = my_similar_links
         dummylinks = orig_catlinks.exclude(id=q_a.id)
-        dummylinks = orig_catlinks.exclude(triplet__l1=q_a.triplet.l1)
-        dummylinks = orig_catlinks.exclude(triplet__l2=q_a.triplet.l2)        
+        dummylinks = dummylinks.exclude(triplet__l1=q_a.triplet.l1)
+        dummylinks = dummylinks.exclude(triplet__l2=q_a.triplet.l2)        
         # Find similar...
         idx = 0
         seed = random.randint(0,3); start=1; end=2

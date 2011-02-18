@@ -9,17 +9,37 @@ FPP = 3
 SPP = 4
 TPP = 5
 
+TPSF = 6
+TPSM = 7
+TPSN = 8
+
+TPPF = 9
+TPPM = 10
+TPPN = 11
+
 ### CONVENIENCE FUNCTIONS ###
 def conjdic (*lst):
-    lst = list(lst)
-    while len(lst) < 6:
-        lst.append(lst[-1])
-    return {FPS:lst[0],SPS:lst[1],TPS:lst[2],
-            FPP:lst[3],SPP:lst[4],TPP:lst[5]}
+    if len(lst) > 6:
+        lst = list(lst)
+        while len(lst) < 10: # Pad out list by repeating last form
+            lst.append(lst[-1])
+        return {FPS:lst[0], SPS:lst[1],TPSM:lst[2],TPSF:lst[3],TPSN:lst[4],TPS:lst[4],
+                FPP:lst[5], SPP:lst[6],TPPM:lst[7],TPPF:lst[8],TPPN:lst[9],TPP:lst[9]}
+    else:
+        lst = list(lst)
+        while len(lst) < 6: # Pad out list by repeating last form
+            lst.append(lst[-1])
+        return {FPS:lst[0],SPS:lst[1],TPS:lst[2],
+                FPP:lst[3],SPP:lst[4],TPP:lst[5]}
 
 # ENGLISH DATA
 
 ENG_SUBJ_PRO = conjdic(u'I',u'you',u'he/she/it',u'We',u'you guys',u'they')
+
+ENG_OBJ_PRO = conjdic(u'me',u'you',u'him',u'her',u'it',
+                      u'us',u'you guys',u'them')
+ENG_NONHUMAN_OBJ_PRO = conjdic(u'I',u'you',u'it',u'it',u'it',
+                               u'us',u'you guys',u'them')
 
 eng_irregular_present = {
     'be': conjdic(u'am',u'are',u'is',u'are'),
@@ -36,9 +56,23 @@ eng_irregular_past = {
     
     }
 eng_irregular_past_simple = {
-    u'give':u'gave',u'have':u'had',u'write':u'wrote',u'go':u'went',u'feel':u'felt',
-    u'eat':u'ate',u'know':u'knew',u'spit':u'spit (past)',u'put':u'put (past)',
-    u'come':u'came',u'can':u'could',u'see':u'saw',u'think':u'thought',u'say':u'said',
+    u'can':u'could',
+    u'catch':u'caught',
+    u'come':u'came',
+    u'eat':u'ate',
+    u'feel':u'felt',
+    u'give':u'gave',
+    u'go':u'went',
+    u'have':u'had',
+    u'know':u'knew',
+    u'make':u'made',
+    u'put':u'put (past)',
+    u'say':u'said',
+    u'see':u'saw',
+    u'spit':u'spat',
+    u'think':u'thought',
+    u'throw':u'threw',
+    u'write':u'wrote',
     }
 
 eng_irregular_pp = {
@@ -55,7 +89,8 @@ eng_irregular_pp = {
     u'smite':u'smitten',
     u'can':u'been able',
     u'think':u'thought',
-    u'say':u'said'
+    u'say':u'said',
+    u'spit':u'spit',
     }
 
 # ENGLISH CONVENIENCE FUNCTS
@@ -66,13 +101,18 @@ def make_eng_form_from_stem (inf, ending):
     if suffix_match:
         suffix = inf[suffix_match.start():suffix_match.end()]
         inf = inf[:suffix_match.start()]
-    if inf[-1] in ['sz'] and ending==u's':
+    if inf[-1] == 'y':
+        if ending.startswith('e'):
+            return inf[:-1]+'i'+ending
+        else:
+            return inf[:-1]+'ie'+ending
+    if ((inf[-1] in ['sz']) or (inf[-2:] in ['ch','sh'])) and ending==u's':
         return inf+u'e'+ending+suffix
-    if inf.endswith(u'e') and inf.lower()!=u'be':
+    if inf.endswith(u'e') and inf.lower()!=u'be' and ending.startswith('e'):
         return inf[:-1]+ending+suffix
     else:
         # double consonants for short vowels...
-        if inf[-1] in u'dgmnpt' and inf[-2] in u'aeiou' and not inf[-3] in u'aeiou':
+        if ending=='ed' and inf[-1] in u'dgmnpt' and inf[-2] in u'aeiou' and not inf[-3] in u'aeiou':
             return inf + inf[-1] + ending + suffix
         else:
             return inf+ending+suffix
@@ -85,7 +125,7 @@ def make_eng_present (inf, person):
     if person != TPS:
         return ENG_SUBJ_PRO[person] + u' ' + inf
     else:
-        return ENG_SUBJ_PRO[person] + u' ' + inf + u's'
+        return ENG_SUBJ_PRO[person] + u' ' + make_eng_form_from_stem(inf,u's')
 
 def make_eng_present_subjunctive (inf, person):
     return make_eng_present(inf, person) + u' (subjunctive)'
@@ -126,6 +166,11 @@ def make_eng_present_perfect_subj (inf, person):
 
 ### SPANISH DATA ###
 
+DO_CLITIC_PRONOUNS = conjdic('me','te','lo','la','lo',
+                             'nos','os','los','las','los')
+IDO_CLITIC_PRONOUNS = conjdic('me','te','le','le','le',
+                             'nos','os','les')
+
 FUT_ROOT = {
     u'decir':u'dir',
     u'hacer':u'har',
@@ -165,20 +210,22 @@ present_irregular = {
     u'ser':conjdic(u'soy',u'eres',u'es',u'somos',u'sois',u'son'),
     u'ir':conjdic(u'voy',u'vas',u'va',u'vamos',u'vais',u'van'),
     u'ver':conjdic(u'veo',u'ves',u've',u'vemos',u'veis',u'ven'),
-    u'haber':conjdic(u'he',u'has',u'ha',u'hemos',u'habeis',u'han'),
+    u'haber':conjdic(u'he',u'has',u'ha',u'hemos',u'habéis',u'han'),
     u'estar':conjdic(u'estoy',u'estás',u'está',u'estamos',u'estáis',u'están')
     }
 
 present_irregular_yo = {
+    u'saber':u'sé',
     u'dar':u'doy',
     u'poner':u'pongo',
-    u'saber':u'sé',
+    u'tener':u'tengo',
     u'venir':u'vengo',
     u'decir':u'digo',
     u'valer':u'valgo',
     u'salir':u'salgo',
     u'conocer':u'conozco',
     u'parecer':u'parezco',
+    u'conducir':u'conduzco',
     }
 
 irregular_participle = {
@@ -346,3 +393,56 @@ def make_verb_quiz (infinitives, spanish_func, english_func):
 #print make_verb_quiz([(u'hablar',u'talk'),(u'ser',u'be'),(u'comer',u'eat'),(u'saber',u'know')],
 #                     make_preterit,make_eng_pret)
         
+def make_ido_quiz (verb_maker=(make_present,make_eng_present),
+                   templates=[(('%(ido)s %(verb)s','%(verb)s to %(pro)s'),[('dar','give'),('escribir','write'),('hablar','talk')]),
+                              (('%(ido)s %(verb)s','%(verb)s for %(pro)s'),[('cocinar','cook')]),
+                              (('%(ido)s %(verb)s un pastel','%(verb)s a cake for %(pro)s'),[('hacer','make'),('hornear','bake')]),
+                              ]
+                   ):
+    ret = []
+    for temp,verbs in templates:
+        for spv,engv in verbs:
+            spant,engt = temp
+            for subj in [FPS,SPS,TPS,FPP,TPP]:
+                for obj in [FPS,SPS,TPSM,TPSF,TPSN,FPP,SPP,TPPN]:
+                    if subj in [FPS,FPP] and obj in [FPS,FPP]:
+                        next
+                    elif subj in [SPS,SPP] and obj in [SPS,SPP]:
+                        next
+                    else:
+                        eng_verb = verb_maker[1](engv,subj)
+                        eng_sentence = engt%{'verb':eng_verb,
+                                             'pro':ENG_OBJ_PRO[obj]}
+                        span_verb = verb_maker[0](spv,subj)
+                        span_sentence = spant%{'verb':span_verb,
+                                               'ido':IDO_CLITIC_PRONOUNS[obj]}
+                        ret.append((span_sentence,eng_sentence))
+    return ret
+                    
+
+def make_do_quiz (verb_maker=(make_present,make_eng_present),
+                   templates=[(('%(do)s %(verb)s','%(verb)s %(pro)s'),[('lanzar','throw'),('atrapar','catch'),('pegar','hit'),
+                                                                       ('poner','place'),('envidiar','envy'),('tener','have'),
+                                                                       ]),
+                              ]
+                   ):
+    ret = []
+    for temp,verbs in templates:
+        for spv,engv in verbs:
+            spant,engt = temp
+            for subj in [FPS,SPS,TPS,FPP,TPP]:
+                for obj in [FPS,SPS,TPSM,TPSF,TPSN,FPP,SPP,TPPN]:
+                    if subj in [FPS,FPP] and obj in [FPS,FPP]:
+                        next
+                    elif subj in [SPS,SPP] and obj in [SPS,SPP]:
+                        next
+                    else:
+                        eng_verb = verb_maker[1](engv,subj)
+                        eng_sentence = engt%{'verb':eng_verb,
+                                             'pro':ENG_OBJ_PRO[obj]}
+                        span_verb = verb_maker[0](spv,subj)
+                        span_sentence = spant%{'verb':span_verb,
+                                               'do':DO_CLITIC_PRONOUNS[obj]}
+                        ret.append((span_sentence,eng_sentence))
+    return ret
+                    

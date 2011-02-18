@@ -18,8 +18,22 @@ def select_or_create (klass,**kw):
         return klass(**kw)
     
 
-def cleanup_old_mistakes ():
-    return
+def cleanup_old_mistakes (*args):
+    spit_spat_confusion = models.Triplet.objects.filter(
+        l1__contains='spit (past)'
+        )
+    for triplet in spit_spat_confusion:
+        triplet.l1 = triplet.l1.replace('spit (past)','spat')
+        print 'Fixed',triplet.l1
+        triplet.save()
+    spit_spitted_confusion = models.Triplet.objects.filter(
+        l1__contains='spitted'
+        )
+    for triplet in spit_spitted_confusion:
+        triplet.l1 = triplet.l1.replace('spitted','spit')
+        print 'fixed',triplet.l1
+        triplet.save()
+    return HttpResponseRedirect('/')
     # Delete everything related to old ser/ir which were confusing
     ser_ir_confusion_triplets = models.Triplet.objects.filter(
         l2__in=[u'fui',u'fuiste',u'fue',u'fuimos',u'fuisteis',u'fueron']
@@ -54,8 +68,11 @@ def add_verbs (verblist, spanish_func, english_func, category):
     for sp,eng in conjugations.make_verb_quiz(verblist, spanish_func, english_func):
         t = select_or_create(models.Triplet,l1=eng,l2=sp)
         t.save()
-        cl = models.CategoryLink(triplet=t,category=category)
-        cl.save()
+        if type(category)!=list:
+            category = [category]
+        for c in category:
+            cl = models.CategoryLink(triplet=t,category=c)
+            cl.save()
     print u'Done!'
 
 def verb_forms ():
@@ -232,6 +249,38 @@ def init (*args):
     init_quizzes()
     return HttpResponseRedirect(u'/quiz/')
 
+def add_pairs_to_cats (pairs, cats):
+    for sp,eng in pairs:
+        t = select_or_create(models.Triplet,l1=eng,l2=sp); t.save()
+        for c in cats:
+            cl = models.CategoryLink(triplet=t,category=c); cl.save()
+
+def make_do_ido (*args):
+    present_do = select_or_create(models.Category,name='Present Tense Verbs w/ Direct Objects',parent=models.Category.objects.get(name='Present Tense Verbs')); present_do.save()
+    add_pairs_to_cats(conjugations.make_do_quiz(),[present_do])
+    present_ido = select_or_create(models.Category,name='Present Tense Verbs w/ Indirect Objects',parent=models.Category.objects.get(name='Present Tense Verbs')); present_ido.save()
+    add_pairs_to_cats(conjugations.make_ido_quiz(),[present_ido])
+    # Past...
+    preterit_do = select_or_create(models.Category,name='Preterit Tense Verbs w/ Direct Objects',parent=models.Category.objects.get(name='Preterit Tense Verbs')); preterit_do.save()
+    add_pairs_to_cats(conjugations.make_do_quiz(verb_maker=(conjugations.make_preterit,conjugations.make_eng_pret)),[preterit_do])
+    preterit_ido = select_or_create(models.Category,name='Preterit Tense Verbs w/ Indirect Objects',parent=models.Category.objects.get(name='Preterit Tense Verbs')); preterit_ido.save()
+    add_pairs_to_cats(conjugations.make_ido_quiz(verb_maker=(conjugations.make_preterit,conjugations.make_eng_pret)),[preterit_ido])
+
+    conditional_do = select_or_create(models.Category,name='Conditional Verbs w/ Direct Objects',parent=models.Category.objects.get(name='Conditional Verbs')); conditional_do.save()
+    add_pairs_to_cats(conjugations.make_do_quiz(verb_maker=(conjugations.make_conditional,conjugations.make_eng_cond)),[conditional_do])
+    conditional_ido = select_or_create(models.Category,name='Conditional Verbs w/ Indirect Objects',parent=models.Category.objects.get(name='Conditional Verbs')); conditional_ido.save()
+    add_pairs_to_cats(conjugations.make_ido_quiz(verb_maker=(conjugations.make_conditional,conjugations.make_eng_cond)),[conditional_ido])
+
+    psub_do = select_or_create(models.Category,name='Past Subjunctive Verbs w/ Direct Objects',parent=models.Category.objects.get(name='Subjunctive')); psub_do.save()
+    add_pairs_to_cats(conjugations.make_do_quiz(verb_maker=(conjugations.make_past_subjunctive,conjugations.make_eng_past_subj)),[preterit_do])
+    psub_ido = select_or_create(models.Category,name='Past Subjunctive Verbs w/ Indirect Objects',parent=models.Category.objects.get(name='Subjunctive')); psub_ido.save()
+    add_pairs_to_cats(conjugations.make_ido_quiz(verb_maker=(conjugations.make_past_subjunctive,conjugations.make_eng_past_subj)),[preterit_ido])
+    make_quiz(u'Spanish IV',
+              [models.Category.objects.get(name=u'Past Subjunctive Verbs w/ Indirect Object')]
+              )
+    
+    
+
 def second_newest_categories (*args):
     smII = select_or_create(models.Category,
                            name=u'Spanish II Semester II Vocabulary'); smII.save()
@@ -246,19 +295,20 @@ def second_newest_categories (*args):
         cl = models.CategoryLink(triplet=t,category=smII); cl.save()
 
 def newest_categories (*args):
-    return
-    cat1 = select_or_create(models.Category,name=u'Spanish 4 Semester II Vocab'); cat.save()
-    cat2 = select_or_create(models.Category,name=u'Immigration Vocab - Ramos - 1',parent=cat1); cat.save()
-    qg = select_or_create(models.QuizGroup,name=u'Spanish IV')
-    qgl = select_or_create(models.QuizGroupLink,category=cat1,quizgroup=qg); qgl.save()
-    qgl = select_or_create(models.QuizGroupLink,category=cat2,quizgroup=qg); qgl.save()
-    ifi = file(u'lengua1.txt',u'r')
-    for l in ifi.readlines():
-        words = l.split(':')
-        words = [w.strip() for w in words]
-        t = select_or_create(models.Triplet,l1=words[1],l2=words[0]); t.save()
-        cl = models.CategoryLink(triplet=t,categoryf=cat2); cl.save()
-        cl = models.CategoryLink(triplet=t,category=smII); cl.save()
+    #cat1 = select_or_create(models.Category,name=u'Spanish 4 Semester II Vocab'); cat1.save()
+    #cat2 = select_or_create(models.Category,name=u'Immigration Vocab - Ramos - 1',parent=cat1); cat2.save()
+    #qg = select_or_create(models.QuizGroup,name=u'Spanish IV')
+    #qgl = select_or_create(models.QuizGroupLink,category=cat1,quizgroup=qg); qgl.save()
+    #qgl = select_or_create(models.QuizGroupLink,category=cat2,quizgroup=qg); qgl.save()
+    #ifi = file(u'lengua1.txt',u'r')
+    #for l in ifi.readlines():
+    #    words = l.split(':')
+    #    words = [w.strip() for w in words]
+    #    t = select_or_create(models.Triplet,l1=words[1],l2=words[0]); t.save()
+    #    cl = models.CategoryLink(triplet=t,category=cat2); cl.save()
+    #    cl = models.CategoryLink(triplet=t,category=cat1); cl.save()
+    make_do_ido()
+    return HttpResponseRedirect('/')
     
     
 def init_quizzes (*args):
