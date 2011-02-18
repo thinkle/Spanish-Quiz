@@ -49,6 +49,13 @@ class QuizGroup (models.Model):
     description = models.TextField()
     parent = models.ForeignKey('self',null=True)
 
+    def __unicode__ (self):
+        prefix = ''
+        if self.parent:
+            prefix = prefix + '%s>'%self.parent
+        return u'%s%s'%(prefix,self.name)
+
+
 class QuizGroupLink (models.Model):
     category = models.ForeignKey(Category)
     quizgroup = models.ForeignKey(QuizGroup)    

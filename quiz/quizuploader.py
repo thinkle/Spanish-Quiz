@@ -5,9 +5,17 @@ from django.forms import ModelForm
 import models
 from quizmaker import select_or_create
 
+def uploader (request):
+    return render_to_response('uploader.html',{})
+
 class CategoryForm (ModelForm):
     class Meta:
         model = models.Category
+
+class QuizGroupLink (ModelForm):
+    class Meta:
+        model = models.QuizGroupLink
+
 
 def new_category (request,errors=None):
     if request.method == 'POST':
@@ -20,7 +28,7 @@ def new_category (request,errors=None):
             print 'ERROR!'
             request.method = None
             return new_category(request,errors=mf.errors)
-        return HttpResponseRedirect('/')
+        return HttpResponseRedirect('/new/')
     else:
         mf = CategoryForm()
         return render_to_response('form.html',
@@ -30,6 +38,29 @@ def new_category (request,errors=None):
                                    'desc':'Create new category',
                                    'action':'/new/category/'}
                                   )
+
+def new_quizgrouplink (request,errors=None):
+    if request.method == 'POST':
+        instance = models.QuizGroupLink()
+        mf = QuizGroupLink(request.POST,instance=instance)
+        if mf.is_valid():
+            mf.save()
+            print 'SAVE!'
+        else:
+            print 'ERROR!'
+            request.method = None
+            return new_quizgrouplink(request,errors=mf.errors)
+        return HttpResponseRedirect('/new/')
+    else:
+        mf = QuizGroupLink()
+        return render_to_response('form.html',
+                                  {'title':'Quizgrouplink',
+                                   'form':mf,
+                                   'errors':errors,
+                                   'desc':'Create new quizgrouplink',
+                                   'action':'/new/qg/'}
+                                  )
+
     
 
 class TripletsForm (forms.Form):
@@ -69,11 +100,11 @@ def new_triplets (request):
                 cl = select_or_create(models.CategoryLink,triplet=t,category=tf.cleaned_data['category']); cl.save()
                 print 'Saved link between',t,'and',cl
             print 'Ignored: ',ignored
-            return HttpResponseRedirect('/')
+            return HttpResponseRedirect('/new/')
         else:
             print tf.errors
             return HttpResponseRedirect('/new/triplets/')
-        return HttpResponseRedirect('/')
+        return HttpResponseRedirect('/new/')
     else:
         tf = TripletsForm()
         return render_to_response('form.html',
