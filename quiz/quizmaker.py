@@ -24,7 +24,7 @@ def cleanup_old_mistakes (*args):
         )
     for triplet in spit_spat_confusion:
         triplet.l1 = triplet.l1.replace('spit (past)','spat')
-        print 'Fixed',triplet.l1
+        #print 'Fixed',triplet.l1
         triplet.save()
     spit_spitted_confusion = models.Triplet.objects.filter(
         l1__contains='spitted'
@@ -32,6 +32,12 @@ def cleanup_old_mistakes (*args):
     for triplet in spit_spitted_confusion:
         triplet.l1 = triplet.l1.replace('spitted','spit')
         print 'fixed',triplet.l1
+        triplet.save()
+    gived_given_confusion = models.Triplet.objects.filter(
+        l1__contains='gived'
+        )
+    for triplet in gived_given_confusion:
+        triplet.l1 = triplet.l1.replace(u'gived',u'given')
         triplet.save()
     return HttpResponseRedirect('/')
     # Delete everything related to old ser/ir which were confusing

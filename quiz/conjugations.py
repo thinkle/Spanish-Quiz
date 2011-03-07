@@ -91,6 +91,7 @@ eng_irregular_pp = {
     u'think':u'thought',
     u'say':u'said',
     u'spit':u'spit',
+    u'give':u'given',
     }
 
 # ENGLISH CONVENIENCE FUNCTS
