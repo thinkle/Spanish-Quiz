@@ -8,7 +8,7 @@
 	      <a href="/mc/{{category.id}}/r">(multiple choice)</a>
 	      {% endif %}
 
-	  <form name="quiz" id="quiz" action="/or/answer/" method="post">
+	  <form name="quiz" id="quiz" action="{{action}}" method="post">
 	    <input type="hidden" name="category" value="{{category.id}}">
 	    <input type="hidden" name="target" value="{{target.id}}">
 	    <input type="hidden" name="reverse" value="{{reverse}}">

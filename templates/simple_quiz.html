@@ -1,6 +1,9 @@
 {% include "quiz_header.html" %}
 	  <b>Category: {{category.name}}</b>
 
+	  {% if seq_history %}
+	  
+	  {% else %}
 	      {% if reverse %}
 	      <a href="/mc/{{category.id}}/">(reverse)</a>
 	      <a href="/or/{{category.id}}/r">(open)</a>
@@ -8,10 +11,10 @@
 	      <a href="/mc/{{category.id}}/r">(reverse)</a>
 	      <a href="/or/{{category.id}}/r">(open)</a>
 	      {% endif %}
-	      
+	  {% endif %}
 
-	  
-	  <form action="/mc/answer/" method="post">
+
+	  <form action="{{action}}" method="post">
 	    <input type="hidden" name="category" value="{{category.id}}">
 	    <input type="hidden" name="target" value="{{target.id}}">
 	    <input type="hidden" name="reverse" value="{{reverse}}">

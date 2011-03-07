@@ -33,7 +33,16 @@ urlpatterns = patterns('',
                        (r'^new/category/$','quiz.quizuploader.new_category'),
                        (r'^new/triplets/$','quiz.quizuploader.new_triplets'),
                        (r'^new/qg/$','quiz.quizuploader.new_quizgrouplink'),
-                       (r'^new/$','quiz.quizuploader.uploader'),                                                                     
+                       (r'^new/$','quiz.quizuploader.uploader'),
+                       (r'^new/sequence/$','quiz.quizuploader.new_sequence'),
+                       (r'^new/sequenceitem/$','quiz.quizuploader.new_sequenceitem'),
+                       (r'^new/append_seq/','quiz.quizuploader.append_sequence_items'),
+                       (r'^seq/$','quiz.views.sequence'),
+                       (r'^seq/(\d+)/','quiz.views.do_sequence'),
+                       (r'^seq/answer/(?P<seqid>\d+)/$','quiz.views.answer'),
+                       (r'^seq/answer/(?P<seqid>\d+)/open','quiz.views.open_response_answer'),                       
+
+
 
     # Uncomment the admin/doc line below and add 'django.contrib.admindocs' 
     # to INSTALLED_APPS to enable admin documentation:

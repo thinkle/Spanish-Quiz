@@ -18,7 +18,8 @@ class Category (models.Model):
     parent = models.ForeignKey('self',null=True)
 
     def children (self):
-        return Category.objects.filter(parent=self)
+        self.children_ = Category.objects.filter(parent=self)
+        return self.children_
 
     def __unicode__ (self):
         prefix = ''
@@ -69,4 +70,37 @@ class QuizData (models.Model):
     correct = models.BooleanField()
     speed = models.IntegerField()
 
+class Sequence (models.Model):
+    name = models.CharField(max_length=250)
+    parent = models.ForeignKey('self',null=True)
 
+    def children (self):
+        return Sequence.objects.filter(parent=self)
+
+    def __unicode__ (self):
+        prefix = ''
+        if self.parent:
+            prefix = prefix + '%s>'%self.parent
+        return u'%s%s'%(prefix,self.name)
+
+class SequenceItem (models.Model):
+    category = models.ForeignKey(Category)
+    prev = models.ForeignKey('self',null=True)
+    threshold = models.FloatField()
+    minimum_problems = models.IntegerField(default=10)
+    maximum_problems = models.IntegerField(default=100)
+    reverse = models.BooleanField(default=False)
+    question_type = models.IntegerField(default=MULTIPLE_CHOICE,choices=((MULTIPLE_CHOICE,'Multiple Choice'),
+                                                                         (OPEN_RESPONSE,'Open Response'),
+                                                                         ),
+                                        )
+    sequence = models.ForeignKey(Sequence)
+
+    def __unicode__ (self):
+        try:
+            return u'<SequenceItem: ' + self.category.name + u'(' + self.sequence.name + u')' \
+                   + (self.reverse and u' Rev' or u'') + (self.question_type==OPEN_RESPONSE and u' Open' or u'') + + u'>'
+        except:
+            return u'Item'
+
+    

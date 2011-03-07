@@ -23,8 +23,38 @@
 	  {% endif %}
 	  <p>You answered in {{lastanswer.speed|floatformat:1}} seconds</p>
 	  {% endif %}
+	</td>
+      </tr>
+      <tr>
+	<td>
 	  <div class="stats" style="border:1px solid black">
-	    <p>Record for {{stats.cat.name}}: {{stats.category.overall.ratio}} ({{stats.category.overall.perc}})</p>
+	    
+	  {% if seq_history %} <!-- Use sequence information if we're in a sequence -->
+	    <table>
+	      <tr><th>Category</th><th>Completed</th><th>Comment</th></tr>
+	      {% for sei in seq_history %}
+	      <tr>
+		<td>>{{sei.seqitem.category.name}}
+		  {% if sei.seqitem.reverse %} (español a inglés)
+		  {% else %} (inglés a español)
+		  {% endif %}
+		  {% if sei.seqitem.question_type %} (abierto) {% endif %}
+		</td>
+		<td>
+		  {% if sei.completed %}
+		  Done!
+		  {% else %}
+		  Still working...
+		  {% endif %}
+		  </td>
+		<td>{{sei.comment}}</td>
+	      </tr>
+	      {% endfor %}
+	    </table>	      
+
+	    {% else %} <!-- Otherwise use generic statistics! -->
+	    
+	      <p>Record for {{stats.cat.name}}: {{stats.category.overall.ratio}} ({{stats.category.overall.perc}})</p>
 	      <ul>
 		<li><i>multiple choice: {{stats.category.mc.ratio}} {{stats.category.mc.perc}}</i></li>
 		<li><i>open response: {{stats.category.open.ratio}} {{stats.category.open.perc}}</i></li>
@@ -52,8 +82,9 @@
 		{{stats.previous_attempt_history }}
 	    </span></p>
 	    {% endif %}
+	    
+	    {% endif %}
 	  </div>
-	  
 	</td>
       </tr>
     </table>
