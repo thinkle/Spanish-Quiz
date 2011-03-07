@@ -325,7 +325,18 @@ class Node:
     def __unicode__ (self):
         return u'<NODE %s [%s]>'%(self.object,len(self.branches))
 
+
+
 def index (request):
+    cat_tree,quizzes = get_cat_tree()
+    seq_tree = get_sequence_tree()
+    return render_to_response('index.html',
+                              {'sequences':seq_tree,
+                               'quizzes':quizzes,
+                               'cat_tree':cat_tree,
+                               }
+                              )
+def get_cat_tree ():
     #print 'INDEX!'
     top_cats = models.Category.objects.filter(parent=None)
     cat_tree = Node(None)
@@ -337,7 +348,6 @@ def index (request):
                 add_to_tree(c,branch)
     for c in top_cats:
         add_to_tree(c,cat_tree)
-    #print 'CAT TREE:',cat_tree
     qquery = models.QuizGroup.objects.all()
     quizzes = []
     for qg in qquery:
@@ -345,11 +355,9 @@ def index (request):
         for qgl in models.QuizGroupLink.objects.filter(quizgroup=qg):
             node.add_branch(qgl.category)
         quizzes.append(node)
-    return render_to_response(
-        'index.html',
-        {'cat_tree':cat_tree,
-         'quizzes':quizzes,
-         })
+    #print 'CAT TREE:',cat_tree
+    return cat_tree,quizzes
+
 
 
 @login_required
@@ -387,7 +395,7 @@ def fix_accents (s):
 
 # Sequence stuff
 
-def sequence (request):
+def get_sequence_tree ():
 
     def add_to_tree (seq, tree):
         branch = Node(seq)
@@ -402,13 +410,10 @@ def sequence (request):
         print 'Adding',s,s.name,s.id
         add_to_tree(s,seq_tree)
 
-    for s in seq_tree.branches:
-        print s
-        print s.object
-        print s.object.name
-        print s.object.id
-        print s.branches
-    
+    return seq_tree
+
+def sequence (request):
+    seq_tree = get_sequence_tree()
     return render_to_response('sequence.html',
                               {'sequences':seq_tree})
 

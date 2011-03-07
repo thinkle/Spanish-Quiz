@@ -2,6 +2,32 @@
   <body>
     <b>Welcome to MR Hinkle's incredibly Low Tech Web Study App</b>
 
+  <h3>Sequences (Courses of studied by Teacher Man, for your studying ease)</h33>
+  <ul>
+    {% for s_first in sequences.branches %}
+    <li><a href="/seq/{{s_first.object.id}}">{{s_first.object}} {{s_first.object.name}}</a>
+      <ul>
+	{% for s1 in s0.branches %}
+	<li><a href="/seq/{{s1.object.id}}">{{s1.object.name}}</a>
+	  <ul>
+	    {% for s2 in s1.branches %}
+	    <li><a href="/seq/{{s2.object.id}}">{{s2.object.name}}</a>
+	      <ul>
+		{% for s3 in s2.branches %}
+		<li><a href="/seq/{{s3.object.id}}">{{s3.object.name}}</a></li>
+		{% endfor %}
+	      </ul>
+	    </li>
+	    {% endfor %}
+	  </ul>
+	</li>
+	{% endfor %}
+      </ul>
+    </li>
+    {% endfor %}
+  </ul>
+
+    
     <h3><b>Quizzes</b></h3>
     <ul>
       {% for quiz in quizzes %}
