@@ -4,8 +4,8 @@
 
   <h3>Sequences (Courses of studied by Teacher Man, for your studying ease)</h33>
   <ul>
-    {% for s_first in sequences.branches %}
-    <li><a href="/seq/{{s_first.object.id}}">{{s_first.object}} {{s_first.object.name}}</a>
+    {% for s0 in sequences.branches %}
+    <li><a href="/seq/{{s0.object.id}}">{{s0.object.name}}</a>
       <ul>
 	{% for s1 in s0.branches %}
 	<li><a href="/seq/{{s1.object.id}}">{{s1.object.name}}</a>

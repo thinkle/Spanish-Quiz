@@ -402,6 +402,7 @@ def get_sequence_tree ():
         tree.add_branch(branch)
         print 'Appending branch',branch,'to tree',tree
         for s in models.Sequence.objects.filter(parent=seq):
+            print 'Adding branch',s,'(below ',seq,')'
             add_to_tree(s,branch)
 
     sequences = models.Sequence.objects.filter(parent=None)
